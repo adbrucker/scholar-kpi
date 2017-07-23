@@ -77,3 +77,11 @@ let getPublicationTableBody (page:HtmlDocument) = page.Descendants["table"]
                                                   |> Seq.fold Seq.append Seq.empty
                                                   |> Seq.map (fun n -> n.Descendants["tr"])                                      
                                                   |> Seq.fold Seq.append Seq.empty
+                                                  |> Seq.map (fun n -> n.Descendants["td"] |> Seq.toList |> parsePublicationTd)
+                                                  |> Seq.toList
+
+(* Some simple tests ... *)
+let authorPages = getAuthorPages "ZWePF1QAAAAJ"
+let publicationTable = List.map getPublicationTableBody authorPages
+                       |> List.fold List.append List.empty
+                                               
