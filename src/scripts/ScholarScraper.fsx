@@ -70,3 +70,10 @@ let parsePublicationTd tds =
                   match tds:HtmlNode list with
                   | [a; citationNode; yearNode]     -> (a.InnerText(), parseCitationId citationNode, parseCitation citationNode, parseYear yearNode)
                   | _             -> ("", None, 0, None)
+
+let getPublicationTableBody (page:HtmlDocument) = page.Descendants["table"]
+                                                  |> Seq.filter(fun n -> n.TryGetAttribute("id") = Some(HtmlAttribute.New("id","gsc_a_t")))
+                                                  |> Seq.map (fun n -> n.Descendants["tbody"])                                   
+                                                  |> Seq.fold Seq.append Seq.empty
+                                                  |> Seq.map (fun n -> n.Descendants["tr"])                                      
+                                                  |> Seq.fold Seq.append Seq.empty
