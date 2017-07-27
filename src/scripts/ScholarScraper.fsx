@@ -71,17 +71,70 @@ let parsePublicationTd tds =
                   | [a; citationNode; yearNode]     -> (a.InnerText(), parseCitationId citationNode, parseCitation citationNode, parseYear yearNode)
                   | _             -> ("", None, 0, None)
 
-let getPublicationTableBody (page:HtmlDocument) = page.Descendants["table"]
-                                                  |> Seq.filter(fun n -> n.TryGetAttribute("id") = Some(HtmlAttribute.New("id","gsc_a_t")))
-                                                  |> Seq.map (fun n -> n.Descendants["tbody"])                                   
-                                                  |> Seq.fold Seq.append Seq.empty
-                                                  |> Seq.map (fun n -> n.Descendants["tr"])                                      
-                                                  |> Seq.fold Seq.append Seq.empty
-                                                  |> Seq.map (fun n -> n.Descendants["td"] |> Seq.toList |> parsePublicationTd)
-                                                  |> Seq.toList
+let getTdListOfTable (page:HtmlDocument) id = page.Descendants["table"]
+                                              |> Seq.filter(fun n -> n.TryGetAttribute("id") = Some(HtmlAttribute.New("id",id)))
+                                              (* |> Seq.map (fun n -> n.Descendants["tbody"])                                   
+                                              |> Seq.fold Seq.append Seq.empty *)
+                                              |> Seq.map (fun n -> n.Descendants["tr"])                                      
+                                              |> Seq.fold Seq.append Seq.empty
+                                              |> Seq.map (fun n -> n.Descendants["td"] |> Seq.toList) 
+                                              |> Seq.filter(fun n -> ([] <> n))
+                                              |> Seq.toList
+
+let getPublicationTableBody (page:HtmlDocument) =  List.map parsePublicationTd (getTdListOfTable page "gsc_a_t")
+
+ (*
+<table id="gsc_rsb_st">
+  <tbody>
+    <tr>
+      <th class="gsc_rsb_sc1">
+        <a href="javascript">Citation indices</a>
+      </th>
+      <th class="gsc_rsb_sth">All</th>
+      <th class="gsc_rsb_sth">Since 2012</th>
+    </tr>
+    <tr>
+      <td class="gsc_rsb_sc1">
+        <a href="javascript" class="gsc_rsb_f" title="...">Citations</a>
+      </td>
+      <td class="gsc_rsb_std">15725</td>
+      <td class="gsc_rsb_std">3926</td>
+    </tr>
+    <tr>
+      <td class="gsc_rsb_sc1">
+        <a href="javascript" class="gsc_rsb_f" title="...">h-index</a>
+      </td>
+      <td class="gsc_rsb_std">31</td>
+      <td class="gsc_rsb_std">21</td>
+    </tr>
+    <tr>
+      <td class="gsc_rsb_sc1">
+        <a href="javascript" class="gsc_rsb_f" title="...">i10-index</a>
+      </td>
+      <td class="gsc_rsb_std">46</td>
+      <td class="gsc_rsb_std">30</td>
+    </tr>
+  </tbody>
+</table>
+ *)
+
+
+let parseKpiTd tds = let parseInt (n:HtmlNode) = try
+                                                   Some(int(n.InnerText()))
+                                                 with
+                                                  | _ -> None
+                     match tds:HtmlNode list with
+                            | [t; n1; n2]     -> (t.InnerText(), parseInt n1, parseInt n2)
+                            | _               -> ("", None, None)
+
+let getKpiTableBody (page:HtmlDocument) =  List.map parseKpiTd (getTdListOfTable page "gsc_rsb_st")
+
+let getKpiTableBodyFromList = function 
+    | (p::_) -> Some (getKpiTableBody p)
+    |   []   -> None 
 
 (* Some simple tests ... *)
 let authorPages = getAuthorPages "ZWePF1QAAAAJ"
 let publicationTable = List.map getPublicationTableBody authorPages
                        |> List.fold List.append List.empty
-                                               
+let kpiTable = getKpiTableBodyFromList authorPages
