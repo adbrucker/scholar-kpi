@@ -71,15 +71,16 @@ let parsePublicationTd tds =
                   | [a; citationNode; yearNode]     -> (a.InnerText(), parseCitationId citationNode, parseCitation citationNode, parseYear yearNode)
                   | _             -> ("", None, 0, None)
 
-let getTdListOfTable (page:HtmlDocument) id = page.Descendants["table"]
-                                              |> Seq.filter(fun n -> n.TryGetAttribute("id") = Some(HtmlAttribute.New("id",id)))
-                                              (* |> Seq.map (fun n -> n.Descendants["tbody"])                                   
-                                              |> Seq.fold Seq.append Seq.empty *)
-                                              |> Seq.map (fun n -> n.Descendants["tr"])                                      
-                                              |> Seq.fold Seq.append Seq.empty
-                                              |> Seq.map (fun n -> n.Descendants["td"] |> Seq.toList) 
-                                              |> Seq.filter(fun n -> ([] <> n))
-                                              |> Seq.toList
+
+let getRowsOfTable (page:HtmlDocument) (rt:(string list)) id  = page.Descendants["table"]
+                                                              |> Seq.filter(fun n -> n.TryGetAttribute("id") = Some(HtmlAttribute.New("id",id)))
+                                                              |> Seq.map (fun n -> n.Descendants["tr"])                                      
+                                                              |> Seq.fold Seq.append Seq.empty
+                                                              |> Seq.map (fun n -> (n.Descendants rt) |> Seq.toList) 
+                                                              |> Seq.filter(fun n -> ([] <> n))
+                                                              |> Seq.toList
+let getTdListOfTable (page:HtmlDocument) id = getRowsOfTable page ["td"] id
+let getThListOfTable (page:HtmlDocument) id = List.concat (getRowsOfTable page ["th"] id) 
 
 let getPublicationTableBody (page:HtmlDocument) =  List.map parsePublicationTd (getTdListOfTable page "gsc_a_t")
 
@@ -129,8 +130,13 @@ let parseKpiTd tds = let parseInt (n:HtmlNode) = try
 
 let getKpiTableBody (page:HtmlDocument) =  List.map parseKpiTd (getTdListOfTable page "gsc_rsb_st")
 
+
 let getKpiTableBodyFromList = function 
     | (p::_) -> Some (getKpiTableBody p)
+    |   []   -> None 
+
+let getKpiTablHeaderFromList = function 
+    | (p::_) -> Some (List.map (fun (n:HtmlNode) -> n.InnerText()) p)
     |   []   -> None 
 
 (* Some simple tests ... *)
