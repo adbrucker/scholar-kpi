@@ -84,6 +84,8 @@ let getThListOfTable (page:HtmlDocument) id = List.concat (getRowsOfTable page [
 
 let getPublicationTableBody (page:HtmlDocument) =  List.map parsePublicationTd (getTdListOfTable page "gsc_a_t")
 
+let getPublicationTable authorPages = List.map getPublicationTableBody authorPages
+                                    |> List.fold List.append List.empty
  (*
 <table id="gsc_rsb_st">
   <tbody>
@@ -136,12 +138,6 @@ let getKpiTableBodyFromList = function
     |   []   -> None 
 
 
-(* Some simple tests ... *)
-let authorPages = getAuthorPages "ZWePF1QAAAAJ"
-let publicationTable = List.map getPublicationTableBody authorPages
-                       |> List.fold List.append List.empty
-let kpiTable = getKpiTableBodyFromList authorPages
-
 let citationYears (page:HtmlDocument) = page.Descendants["div"]
                                        |> Seq.filter(fun n -> n.TryGetAttribute("id") = Some(HtmlAttribute.New("id","gsc_g_x")))
                                        |> Seq.map (fun n -> n.Descendants(["span"]))
@@ -171,4 +167,16 @@ let getPaperCitationTable (page:HtmlDocument) = let citationData  = getCitationR
                                                 let citationYears = citationData |> Seq.take ((Seq.length citationData) / 2) |> Seq.toList
                                                 let citations     = citationData |> Seq.skip ((Seq.length citationData) / 2) |> Seq.toList
                                                 tupleize (citationYears, citations)
- 
+
+
+let getOverviewCitationTableFromList = function 
+    | (p::_) -> Some (getOverviewCitationTable p)
+    |   []   -> None 
+
+
+(* Some simple tests ... *)
+let authorPages = getAuthorPages "ZWePF1QAAAAJ"
+let publicationTable = getPublicationTable authorPages
+let kpiTable = getKpiTableBodyFromList authorPages
+let overviewCitationTable = getOverviewCitationTableFromList authorPages
+
