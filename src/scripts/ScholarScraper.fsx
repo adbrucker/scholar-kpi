@@ -32,7 +32,7 @@ let getAuthorPages author = let rec getAuthorPagesRec author n = let page = getA
                                                                  then page::(getAuthorPagesRec author (n+1)) 
                                                                  else [page]
                             getAuthorPagesRec author 0
-(* )
+(* 
 <tr class="gsc_a_tr">
   <td class="gsc_a_t">
     <a href="/citations?view_op=view_citation&amp;hl=en&amp;user=ZWePF1QAAAAJ&amp;citation_for_view=ZWePF1QAAAAJ:WF5omc3nYNoC"
@@ -135,12 +135,33 @@ let getKpiTableBodyFromList = function
     | (p::_) -> Some (getKpiTableBody p)
     |   []   -> None 
 
-let getKpiTablHeaderFromList = function 
-    | (p::_) -> Some (List.map (fun (n:HtmlNode) -> n.InnerText()) p)
-    |   []   -> None 
 
 (* Some simple tests ... *)
 let authorPages = getAuthorPages "ZWePF1QAAAAJ"
 let publicationTable = List.map getPublicationTableBody authorPages
                        |> List.fold List.append List.empty
 let kpiTable = getKpiTableBodyFromList authorPages
+
+let citationYears (page:HtmlDocument) = page.Descendants["div"]
+                                       |> Seq.filter(fun n -> n.TryGetAttribute("id") = Some(HtmlAttribute.New("id","gsc_g_x")))
+                                       |> Seq.map (fun n -> n.Descendants(["span"]))
+                                       |> Seq.fold Seq.append Seq.empty
+                                       |> Seq.map (fun n -> int (n.InnerText()))
+                                       |> Seq.toList
+
+let rec tupleize = function 
+                 | (x::xs), (y::ys) -> (x,y)::(tupleize (xs, ys)) 
+                 | [], []           -> []
+                 | (x::xs), []      -> []
+                 | [], (y::ys)      -> []
+
+
+let citationTable (page:HtmlDocument) = let getRow (page:HtmlDocument) id = page.Descendants["div"]
+                                                                           |> Seq.filter(fun n -> n.TryGetAttribute("id") = Some(HtmlAttribute.New("id",id)))
+                                                                           |> Seq.map (fun n -> n.Descendants(["span"]))
+                                                                           |> Seq.fold Seq.append Seq.empty
+                                                                           |> Seq.map (fun n -> int (n.InnerText()))
+                                                                           |> Seq.toList
+                                        let citationYears = getRow page "gsc_g_x"
+                                        let citations     = getRow page "gsc_g_bars"
+                                        tupleize (citationYears, citations)
