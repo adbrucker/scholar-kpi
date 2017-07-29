@@ -59,12 +59,12 @@ let parsePublicationTd tds =
                                                        n.Descendants["a"]
                                                         |> Seq.choose (fun (x:HtmlNode) -> x.TryGetAttribute("href")
                                                                                          |> Option.map (fun a -> x.InnerText(), a.Value()))
-                                                         |> Seq.head
-                                                         |> snd
-                                                         |> (fun s -> s.Split([| '='; '&' |]))
-                                                         |> Seq.rev
-                                                         |> Seq.head
-                                                         |> Some
+                                                        |> Seq.head
+                                                        |> snd
+                                                        |> (fun s -> s.Split([| '='; '&' |]))
+                                                        |> Seq.rev
+                                                        |> Seq.head
+                                                        |> (fun s -> if isNull s || s = "" then None else Some s) 
                                                      with
                                                      | _ -> None
                   match tds:HtmlNode list with
@@ -179,4 +179,3 @@ let authorPages = getAuthorPages "ZWePF1QAAAAJ"
 let publicationTable = getPublicationTable authorPages
 let kpiTable = getKpiTableBodyFromList authorPages
 let overviewCitationTable = getOverviewCitationTableFromList authorPages
-
