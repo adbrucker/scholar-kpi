@@ -155,13 +155,20 @@ let rec tupleize = function
                  | (x::xs), []      -> []
                  | [], (y::ys)      -> []
 
+let getCitationRow (page:HtmlDocument) id = page.Descendants["div"]
+                                           |> Seq.filter(fun n -> n.TryGetAttribute("id") = Some(HtmlAttribute.New("id",id)))
+                                           |> Seq.map (fun n -> n.Descendants(["span"]))
+                                           |> Seq.fold Seq.append Seq.empty
+                                           |> Seq.map (fun n -> int (n.InnerText()))
+                                           |> Seq.toList
+                                        
 
-let citationTable (page:HtmlDocument) = let getRow (page:HtmlDocument) id = page.Descendants["div"]
-                                                                           |> Seq.filter(fun n -> n.TryGetAttribute("id") = Some(HtmlAttribute.New("id",id)))
-                                                                           |> Seq.map (fun n -> n.Descendants(["span"]))
-                                                                           |> Seq.fold Seq.append Seq.empty
-                                                                           |> Seq.map (fun n -> int (n.InnerText()))
-                                                                           |> Seq.toList
-                                        let citationYears = getRow page "gsc_g_x"
-                                        let citations     = getRow page "gsc_g_bars"
-                                        tupleize (citationYears, citations)
+let getOverviewCitationTable (page:HtmlDocument) = let citationYears = getCitationRow page "gsc_g_x"
+                                                   let citations     = getCitationRow page "gsc_g_bars"
+                                                   tupleize (citationYears, citations)
+
+let getPaperCitationTable (page:HtmlDocument) = let citationData  = getCitationRow page "gsc_graph_bars"
+                                                let citationYears = citationData |> Seq.take ((Seq.length citationData) / 2) |> Seq.toList
+                                                let citations     = citationData |> Seq.skip ((Seq.length citationData) / 2) |> Seq.toList
+                                                tupleize (citationYears, citations)
+ 
