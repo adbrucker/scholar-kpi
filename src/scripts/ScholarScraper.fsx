@@ -21,6 +21,10 @@ open FSharp.Data
 let getAuthorPage author n = HtmlDocument.Load("https://scholar.google.com/citations?user="+
                                                author+"&cstart="+string(n*100)+"&pagesize=100")
 
+let getPaperCitationPage citationId = HtmlDocument.Load("https://scholar.google.com/citations?"+
+                                                       "view_op=view_citation&hl=en&"+
+                                                       "citation_for_view="+citationId)
+
 let hasNextAuthorPage (ap:HtmlDocument) = ap.Descendants["button"]
                                         |> Seq.filter (fun n -> 
                                                         n.TryGetAttribute("aria-label") = 
@@ -68,8 +72,8 @@ let parsePublicationTd tds =
                                                      with
                                                      | _ -> None
                   match tds:HtmlNode list with
-                  | [a; citationNode; yearNode]     -> (a.InnerText(), parseCitationId citationNode, parseCitation citationNode, parseYear yearNode)
-                  | _             -> ("", None, 0, None)
+                  | [a; citationNode; yearNode]     -> (a.InnerText(), parseCitationId a, parseCitation citationNode, parseCitationId citationNode, parseYear yearNode)
+                  | _             -> ("", None, 0, None, None)
 
 
 let getRowsOfTable (page:HtmlDocument) (rt:(string list)) id  = page.Descendants["table"]
@@ -173,9 +177,15 @@ let getOverviewCitationTableFromList = function
     | (p::_) -> Some (getOverviewCitationTable p)
     |   []   -> None 
 
+let getPaperCitationTables  publicationTable =  publicationTable |> List.filter (fun (_, id, citations, _, _) -> id <> None && citations <> 0)
+                                                                 |> List.map (fun (_, id, _ , _, _) -> match id with 
+                                                                                                        | Some citationId -> (citationId, getPaperCitationTable (getPaperCitationPage citationId))
+                                                                                                        | None            -> ("", []))
+                                                                 |> List.filter (fun (s, _) -> s <> "")
 
 (* Some simple tests ... *)
 let authorPages = getAuthorPages "ZWePF1QAAAAJ"
 let publicationTable = getPublicationTable authorPages
 let kpiTable = getKpiTableBodyFromList authorPages
 let overviewCitationTable = getOverviewCitationTableFromList authorPages
+let papercitationTables = getPaperCitationTables publicationTable
