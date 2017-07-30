@@ -18,12 +18,17 @@
 #r @"../../packages/FSharp.Data/lib/net40/FSharp.Data.dll"
 open FSharp.Data
 
+#load @"PublicationTypes.fsx"
+open PublicationTypes
+
 let getAuthorPage author n = HtmlDocument.Load("https://scholar.google.com/citations?user="+
                                                author+"&cstart="+string(n*100)+"&pagesize=100")
 
 let getPaperCitationPage citationId = HtmlDocument.Load("https://scholar.google.com/citations?"+
                                                        "view_op=view_citation&hl=en&"+
                                                        "citation_for_view="+citationId)
+
+
 
 let hasNextAuthorPage (ap:HtmlDocument) = ap.Descendants["button"]
                                         |> Seq.filter (fun n -> 
@@ -174,8 +179,8 @@ let getPaperCitationTable (page:HtmlDocument) = let citationData  = getCitationR
 
 
 let getOverviewCitationTableFromList = function 
-    | (p::_) -> Some (getOverviewCitationTable p)
-    |   []   -> None 
+    | (p::_) -> (getOverviewCitationTable p)
+    |   []   -> [] 
 
 let getPaperCitationTables  publicationTable =  publicationTable |> List.filter (fun (_, id, citations, _, _) -> id <> None && citations <> 0)
                                                                  |> List.map (fun (_, id, _ , _, _) -> match id with 
