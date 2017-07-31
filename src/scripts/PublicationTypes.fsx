@@ -24,7 +24,7 @@ type Publication =
    val Title:string
    val Year: int option 
    val Id: string
-   val CitationKey: string
+   val CitationKey: string option
    val Citations:int   
    val CitationHistory: (int * int) list
    new(id,title,year,citationKey, citations,citationHistory) = {Id=id; Title=title; 
@@ -49,9 +49,9 @@ type PublicationList =
     val AuthorId: string
     val DateTime: DateTime
     val Publications: (Publication list)
-    val Metrics: BibMetrics
-    val RecentMetrics: BibMetrics
-    val RecentYear: int 
+    val Metrics: BibMetrics option
+    val RecentMetrics: BibMetrics option
+    val RecentYear: int option
     new(authorId, dateTime, publications, metrics, recentMetrics, recentYear) = {AuthorId=authorId;
                                                                                  DateTime=dateTime;
                                                                                  Publications=publications;

@@ -20,6 +20,7 @@ open FSharp.Data
 
 #load @"PublicationTypes.fsx"
 open PublicationTypes
+open System
 
 let getAuthorPage author n = HtmlDocument.Load("https://scholar.google.com/citations?user="+
                                                author+"&cstart="+string(n*100)+"&pagesize=100")
@@ -27,8 +28,6 @@ let getAuthorPage author n = HtmlDocument.Load("https://scholar.google.com/citat
 let getPaperCitationPage citationId = HtmlDocument.Load("https://scholar.google.com/citations?"+
                                                        "view_op=view_citation&hl=en&"+
                                                        "citation_for_view="+citationId)
-
-
 
 let hasNextAuthorPage (ap:HtmlDocument) = ap.Descendants["button"]
                                         |> Seq.filter (fun n -> 
@@ -41,6 +40,43 @@ let getAuthorPages author = let rec getAuthorPagesRec author n = let page = getA
                                                                  then page::(getAuthorPagesRec author (n+1)) 
                                                                  else [page]
                             getAuthorPagesRec author 0
+
+
+let rec tupleize = function 
+                 | (x::xs), (y::ys) -> (x,y)::(tupleize (xs, ys)) 
+                 | [], []           -> []
+                 | (x::xs), []      -> []
+                 | [], (y::ys)      -> []
+
+let getCitationRow (page:HtmlDocument) id = page.Descendants["div"]
+                                           |> Seq.filter(fun n -> n.TryGetAttribute("id") = Some(HtmlAttribute.New("id",id)))
+                                           |> Seq.map (fun n -> n.Descendants(["span"]))
+                                           |> Seq.fold Seq.append Seq.empty
+                                           |> Seq.map (fun n -> int (n.InnerText()))
+                                           |> Seq.toList
+                                        
+
+let getOverviewCitationTable (page:HtmlDocument) = let citationYears = getCitationRow page "gsc_g_x"
+                                                   let citations     = getCitationRow page "gsc_g_bars"
+                                                   tupleize (citationYears, citations)
+
+let getPaperCitationTable (page:HtmlDocument) = let citationData  = getCitationRow page "gsc_graph_bars"
+                                                let citationYears = citationData |> Seq.take ((Seq.length citationData) / 2) |> Seq.toList
+                                                let citations     = citationData |> Seq.skip ((Seq.length citationData) / 2) |> Seq.toList
+                                                tupleize (citationYears, citations)
+
+
+let getOverviewCitationTableFromList = function 
+    | (p::_) -> (getOverviewCitationTable p)
+    |   []   -> [] 
+
+let getPaperCitationTables  publicationTable =  publicationTable |> List.filter (fun (_, id, citations, _, _) -> id <> None && citations <> 0)
+                                                                 |> List.map (fun (_, id, _ , _, _) -> match id with 
+                                                                                                        | Some citationId -> (citationId, getPaperCitationTable (getPaperCitationPage citationId))
+                                                                                                        | None            -> ("", []))
+                                                                 |> List.filter (fun (s, _) -> s <> "")
+
+
 (* 
 <tr class="gsc_a_tr">
   <td class="gsc_a_t">
@@ -55,7 +91,7 @@ let getAuthorPages author = let rec getAuthorPagesRec author n = let page = getA
   <td class="gsc_a_y"><span class="gsc_a_h">2009</span></td>
 </tr>
 *)
-let parsePublicationTd tds =
+let parsePublicationTd follow tds =
                   let parseYear (n:HtmlNode) = try
                                                  Some(int(n.InnerText()))
                                                with
@@ -76,11 +112,16 @@ let parsePublicationTd tds =
                                                         |> (fun s -> if isNull s || s = "" then None else Some s) 
                                                      with
                                                      | _ -> None
+                  let citationHistory  citationNode = if follow then match parseCitationId citationNode with 
+                                                                     | Some id -> getPaperCitationTable (getPaperCitationPage id)
+                                                                     | None    -> []
+                                                                 else []                              
                   match tds:HtmlNode list with
-                  | [a; citationNode; yearNode]     -> (a.InnerText(), parseCitationId a, parseCitation citationNode, parseCitationId citationNode, parseYear yearNode)
-                  | _             -> ("", None, 0, None, None)
-
-
+                  | [a; citationNode; yearNode]     -> Publication((parseCitationId a).Value, a.InnerText(), parseYear yearNode, 
+                                                                    parseCitationId citationNode, parseCitation citationNode, 
+                                                                    citationHistory citationNode)
+                  | _                               -> Publication("", "", None, None, 0,[])
+                  
 let getRowsOfTable (page:HtmlDocument) (rt:(string list)) id  = page.Descendants["table"]
                                                               |> Seq.filter(fun n -> n.TryGetAttribute("id") = Some(HtmlAttribute.New("id",id)))
                                                               |> Seq.map (fun n -> n.Descendants["tr"])                                      
@@ -91,7 +132,7 @@ let getRowsOfTable (page:HtmlDocument) (rt:(string list)) id  = page.Descendants
 let getTdListOfTable (page:HtmlDocument) id = getRowsOfTable page ["td"] id
 let getThListOfTable (page:HtmlDocument) id = List.concat (getRowsOfTable page ["th"] id) 
 
-let getPublicationTableBody (page:HtmlDocument) =  List.map parsePublicationTd (getTdListOfTable page "gsc_a_t")
+let getPublicationTableBody (page:HtmlDocument) =  List.map (parsePublicationTd true) (getTdListOfTable page "gsc_a_t")
 
 let getPublicationTable authorPages = List.map getPublicationTableBody authorPages
                                     |> List.fold List.append List.empty
@@ -131,16 +172,30 @@ let getPublicationTable authorPages = List.map getPublicationTableBody authorPag
  *)
 
 
-let parseKpiTd tds = let parseInt (n:HtmlNode) = try
-                                                   Some(int(n.InnerText()))
-                                                 with
-                                                  | _ -> None
-                     match tds:HtmlNode list with
-                            | [t; n1; n2]     -> (t.InnerText(), parseInt n1, parseInt n2)
-                            | _               -> ("", None, None)
+let parseMetricsTd tds = let parseInt (n:HtmlNode) = try
+                                                       Some(int(n.InnerText()))
+                                                     with
+                                                     | _ -> None
+                         match tds:HtmlNode list with
+                               | [t; n1; n2]     -> (t.InnerText(), parseInt n1, parseInt n2)
+                               | _               -> ("", None, None)
 
-let getKpiTableBody (page:HtmlDocument) =  List.map parseKpiTd (getTdListOfTable page "gsc_rsb_st")
-
+let getKpiTableBody (page:HtmlDocument) =  
+        let mkBibMetrics = function 
+            | (Some(_, Some i, _), Some (_, Some h, _), Some (_, Some c, _)) -> Some (BibMetrics(i, h, c))
+            | (_, _, _)                                                      -> None
+        let mkRecentBibMetrics = function 
+             | (Some(_, _, Some i), Some (_, _, Some h), Some (_, _, Some c)) -> Some (BibMetrics(i, h, c))
+             | _                                                              -> None
+        let rawData    =  List.map parseMetricsTd (getTdListOfTable page "gsc_rsb_st")
+        let year       = try (List.find (fun y -> y <> None) 
+                             (List.map (fun (n:HtmlNode) -> try Some(int (n.InnerText())) with | _ -> None)  
+                                            (getThListOfTable page "gsc_rsb_st")))
+                         with | _ -> None
+        let citations = try Some (List.find (fun (key, _, _ ) -> (key = "Citations")) rawData) with | _ -> None
+        let i10Index  = try Some (List.find (fun (key, _, _ ) -> (key = "i10-index")) rawData) with | _ -> None
+        let hIndex    = try Some (List.find (fun (key, _, _ ) -> (key = "h-index")) rawData) with   | _ -> None
+        (mkBibMetrics (i10Index, hIndex, citations), mkRecentBibMetrics (i10Index, hIndex, citations), year)
 
 let getKpiTableBodyFromList = function 
     | (p::_) -> Some (getKpiTableBody p)
@@ -154,43 +209,17 @@ let citationYears (page:HtmlDocument) = page.Descendants["div"]
                                        |> Seq.map (fun n -> int (n.InnerText()))
                                        |> Seq.toList
 
-let rec tupleize = function 
-                 | (x::xs), (y::ys) -> (x,y)::(tupleize (xs, ys)) 
-                 | [], []           -> []
-                 | (x::xs), []      -> []
-                 | [], (y::ys)      -> []
-
-let getCitationRow (page:HtmlDocument) id = page.Descendants["div"]
-                                           |> Seq.filter(fun n -> n.TryGetAttribute("id") = Some(HtmlAttribute.New("id",id)))
-                                           |> Seq.map (fun n -> n.Descendants(["span"]))
-                                           |> Seq.fold Seq.append Seq.empty
-                                           |> Seq.map (fun n -> int (n.InnerText()))
-                                           |> Seq.toList
-                                        
-
-let getOverviewCitationTable (page:HtmlDocument) = let citationYears = getCitationRow page "gsc_g_x"
-                                                   let citations     = getCitationRow page "gsc_g_bars"
-                                                   tupleize (citationYears, citations)
-
-let getPaperCitationTable (page:HtmlDocument) = let citationData  = getCitationRow page "gsc_graph_bars"
-                                                let citationYears = citationData |> Seq.take ((Seq.length citationData) / 2) |> Seq.toList
-                                                let citations     = citationData |> Seq.skip ((Seq.length citationData) / 2) |> Seq.toList
-                                                tupleize (citationYears, citations)
-
-
-let getOverviewCitationTableFromList = function 
-    | (p::_) -> (getOverviewCitationTable p)
-    |   []   -> [] 
-
-let getPaperCitationTables  publicationTable =  publicationTable |> List.filter (fun (_, id, citations, _, _) -> id <> None && citations <> 0)
-                                                                 |> List.map (fun (_, id, _ , _, _) -> match id with 
-                                                                                                        | Some citationId -> (citationId, getPaperCitationTable (getPaperCitationPage citationId))
-                                                                                                        | None            -> ("", []))
-                                                                 |> List.filter (fun (s, _) -> s <> "")
-
 (* Some simple tests ... *)
-let authorPages = getAuthorPages "ZWePF1QAAAAJ"
-let publicationTable = getPublicationTable authorPages
-let kpiTable = getKpiTableBodyFromList authorPages
-let overviewCitationTable = getOverviewCitationTableFromList authorPages
-let papercitationTables = getPaperCitationTables publicationTable
+let loadPublicationList authorId = 
+    let authorPages = getAuthorPages authorId
+    let publicationTableList = getPublicationTable authorPages
+    let metrics = getKpiTableBodyFromList authorPages
+    match metrics with 
+      | Some (m, rm, ry) -> PublicationList(authorId, DateTime.Now, publicationTableList, 
+                                             m, rm, ry)  
+      | None   -> PublicationList(authorId, DateTime.Now, publicationTableList, 
+                                   None, None, None)
+
+let authorId= "ZWePF1QAAAAJ" 
+
+let publications = loadPublicationList "ZWePF1QAAAAJ"     
