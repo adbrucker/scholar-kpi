@@ -23,17 +23,23 @@ open PublicationTypes
 open System
 open System.Threading
 
+
+let loadUrlWithDelay url = ignore (printf "Downloading: %s\n"  url)
+                           Thread.Sleep(1337);HtmlDocument.Load(url)
+
 let getAuthorPage author n = let url = "https://scholar.google.com/citations?user="+
                                                author+"&cstart="+string(n*100)+"&pagesize=100"
-                             ignore (printf "Downloading: %s\n"  url)
-                             Thread.Sleep(1337);HtmlDocument.Load(url)
+                             loadUrlWithDelay url
 
 let getPaperCitationPage citationId = let url = "https://scholar.google.com/citations?"+
                                                        "view_op=view_citation&hl=en&"+
                                                        "citation_for_view="+citationId
-                                      ignore (printf "Downloading: %s\n"  url)
-                                      Thread.Sleep(1337);HtmlDocument.Load(url)
-
+                                      loadUrlWithDelay url
+                 
+let getCitingPapersPage citationId = let url = "https://scholar.google.com/scholar?cites="+
+                                                citationId
+                                     loadUrlWithDelay url
+        
 let hasNextAuthorPage (ap:HtmlDocument) = ap.Descendants["button"]
                                         |> Seq.filter (fun n -> 
                                                         n.TryGetAttribute("aria-label") = 
