@@ -21,13 +21,18 @@ open FSharp.Data
 #load @"PublicationTypes.fsx"
 open PublicationTypes
 open System
+open System.Threading
 
-let getAuthorPage author n = HtmlDocument.Load("https://scholar.google.com/citations?user="+
-                                               author+"&cstart="+string(n*100)+"&pagesize=100")
+let getAuthorPage author n = let url = "https://scholar.google.com/citations?user="+
+                                               author+"&cstart="+string(n*100)+"&pagesize=100"
+                             ignore (printf "Downloading: %s\n"  url)
+                             Thread.Sleep(1337);HtmlDocument.Load(url)
 
-let getPaperCitationPage citationId = HtmlDocument.Load("https://scholar.google.com/citations?"+
+let getPaperCitationPage citationId = let url = "https://scholar.google.com/citations?"+
                                                        "view_op=view_citation&hl=en&"+
-                                                       "citation_for_view="+citationId)
+                                                       "citation_for_view="+citationId
+                                      ignore (printf "Downloading: %s\n"  url)
+                                      Thread.Sleep(1337);HtmlDocument.Load(url)
 
 let hasNextAuthorPage (ap:HtmlDocument) = ap.Descendants["button"]
                                         |> Seq.filter (fun n -> 
@@ -112,14 +117,11 @@ let parsePublicationTd follow tds =
                                                         |> (fun s -> if isNull s || s = "" then None else Some s) 
                                                      with
                                                      | _ -> None
-                  let citationHistory  citationNode = if follow then match parseCitationId citationNode with 
-                                                                     | Some id -> getPaperCitationTable (getPaperCitationPage id)
-                                                                     | None    -> []
-                                                                 else []                              
+                  let citationHistory id  = if follow then getPaperCitationTable (getPaperCitationPage id) else []
                   match tds:HtmlNode list with
                   | [a; citationNode; yearNode]     -> Publication((parseCitationId a).Value, a.InnerText(), parseYear yearNode, 
                                                                     parseCitationId citationNode, parseCitation citationNode, 
-                                                                    citationHistory citationNode)
+                                                                    citationHistory (parseCitationId a).Value)
                   | _                               -> Publication("", "", None, None, 0,[])
                   
 let getRowsOfTable (page:HtmlDocument) (rt:(string list)) id  = page.Descendants["table"]
@@ -133,6 +135,7 @@ let getTdListOfTable (page:HtmlDocument) id = getRowsOfTable page ["td"] id
 let getThListOfTable (page:HtmlDocument) id = List.concat (getRowsOfTable page ["th"] id) 
 
 let getPublicationTableBody (page:HtmlDocument) =  List.map (parsePublicationTd true) (getTdListOfTable page "gsc_a_t")
+
 
 let getPublicationTable authorPages = List.map getPublicationTableBody authorPages
                                     |> List.fold List.append List.empty
