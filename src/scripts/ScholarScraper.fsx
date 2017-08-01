@@ -19,13 +19,14 @@
 open FSharp.Data
 
 #load @"PublicationTypes.fsx"
+
 open PublicationTypes
+
 open System
 open System.Threading
 
-
 let loadUrlWithDelay url = ignore (printf "Downloading: %s\n"  url)
-                           Thread.Sleep(1337);HtmlDocument.Load(url)
+                           Thread.Sleep(2*1337);HtmlDocument.Load(url)
 
 let getAuthorPage author n = let url = "https://scholar.google.com/citations?user="+
                                                author+"&cstart="+string(n*100)+"&pagesize=100"
@@ -52,7 +53,6 @@ let getAuthorPages author = let rec getAuthorPagesRec author n = let page = getA
                                                                  else [page]
                             getAuthorPagesRec author 0
 
-
 let rec tupleize = function 
                  | (x::xs), (y::ys) -> (x,y)::(tupleize (xs, ys)) 
                  | [], []           -> []
@@ -66,7 +66,6 @@ let getCitationRow (page:HtmlDocument) id = page.Descendants["div"]
                                            |> Seq.map (fun n -> int (n.InnerText()))
                                            |> Seq.toList
                                         
-
 let getOverviewCitationTable (page:HtmlDocument) = let citationYears = getCitationRow page "gsc_g_x"
                                                    let citations     = getCitationRow page "gsc_g_bars"
                                                    tupleize (citationYears, citations)
@@ -75,7 +74,6 @@ let getPaperCitationTable (page:HtmlDocument) = let citationData  = getCitationR
                                                 let citationYears = citationData |> Seq.take ((Seq.length citationData) / 2) |> Seq.toList
                                                 let citations     = citationData |> Seq.skip ((Seq.length citationData) / 2) |> Seq.toList
                                                 tupleize (citationYears, citations)
-
 
 let getOverviewCitationTableFromList = function 
     | (p::_) -> (getOverviewCitationTable p)
@@ -139,9 +137,7 @@ let getRowsOfTable (page:HtmlDocument) (rt:(string list)) id  = page.Descendants
                                                               |> Seq.toList
 let getTdListOfTable (page:HtmlDocument) id = getRowsOfTable page ["td"] id
 let getThListOfTable (page:HtmlDocument) id = List.concat (getRowsOfTable page ["th"] id) 
-
 let getPublicationTableBody (page:HtmlDocument) =  List.map (parsePublicationTd true) (getTdListOfTable page "gsc_a_t")
-
 
 let getPublicationTable authorPages = List.map getPublicationTableBody authorPages
                                     |> List.fold List.append List.empty
@@ -179,8 +175,6 @@ let getPublicationTable authorPages = List.map getPublicationTableBody authorPag
   </tbody>
 </table>
  *)
-
-
 let parseMetricsTd tds = let parseInt (n:HtmlNode) = try
                                                        Some(int(n.InnerText()))
                                                      with
@@ -210,7 +204,6 @@ let getKpiTableBodyFromList = function
     | (p::_) -> Some (getKpiTableBody p)
     |   []   -> None 
 
-
 let citationYears (page:HtmlDocument) = page.Descendants["div"]
                                        |> Seq.filter(fun n -> n.TryGetAttribute("id") = Some(HtmlAttribute.New("id","gsc_g_x")))
                                        |> Seq.map (fun n -> n.Descendants(["span"]))
@@ -218,7 +211,6 @@ let citationYears (page:HtmlDocument) = page.Descendants["div"]
                                        |> Seq.map (fun n -> int (n.InnerText()))
                                        |> Seq.toList
 
-(* Some simple tests ... *)
 let loadPublicationList authorId = 
     let authorPages = getAuthorPages authorId
     let publicationTableList = getPublicationTable authorPages
@@ -229,6 +221,6 @@ let loadPublicationList authorId =
       | None   -> PublicationList(authorId, DateTime.Now, publicationTableList, 
                                    None, None, None)
 
+(* Some simple tests ... *)
 let authorId= "ZWePF1QAAAAJ" 
-
 let publications = loadPublicationList "ZWePF1QAAAAJ"     
