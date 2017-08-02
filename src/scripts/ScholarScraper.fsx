@@ -24,22 +24,27 @@ open PublicationTypes
 
 open System
 open System.Threading
+open System.IO
+open System.Net
 
-let loadUrlWithDelay url = ignore (printf "Downloading: %s\n"  url)
-                           Thread.Sleep(2*1337);HtmlDocument.Load(url)
+let loadUrlWithDelay delay url = ignore (printf "Downloading: %s\n"  url)
+                                 match delay with 
+                                 | Some t -> Thread.Sleep(t:int)
+                                 |_       -> Thread.Sleep(42*1337)
+                                 HtmlDocument.Load(url)
 
 let getAuthorPage author n = let url = "https://scholar.google.com/citations?user="+
                                                author+"&cstart="+string(n*100)+"&pagesize=100"
-                             loadUrlWithDelay url
+                             loadUrlWithDelay None url
 
 let getPaperCitationPage citationId = let url = "https://scholar.google.com/citations?"+
                                                        "view_op=view_citation&hl=en&"+
                                                        "citation_for_view="+citationId
-                                      loadUrlWithDelay url
+                                      loadUrlWithDelay None url
                  
 let getCitingPapersPage citationId = let url = "https://scholar.google.com/scholar?cites="+
                                                 citationId
-                                     loadUrlWithDelay url
+                                     loadUrlWithDelay None url
         
 let hasNextAuthorPage (ap:HtmlDocument) = ap.Descendants["button"]
                                         |> Seq.filter (fun n -> 
