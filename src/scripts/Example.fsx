@@ -237,3 +237,24 @@ let loadPublicationList recursive authorId =
                                              m, rm, ry)  
       | None   -> PublicationList(authorId, DateTime.Now, publicationTableList, 
                                    None, None, None)
+
+(* Some simple tests ... *)
+let authorId= "ZWePF1QAAAAJ" 
+let publications = loadPublicationList false "ZWePF1QAAAAJ"     
+
+
+
+let pubSince year publications = List.filter (fun (p:Publication) -> p.Year >= Some year) publications
+                                                 
+
+let i10Index publications= List.length (List.filter (fun (p:Publication) -> p.Citations > 9) publications)
+
+let hIndex year publications= 
+       let rec hIndexRec i = function 
+                           | (c::cs) -> if c  >= (i+1) then hIndexRec (i+1) cs else i 
+                           | []      -> i
+       hIndexRec 0 (List.rev (List.sort (List.map (fun (p:Publication) -> p.Citations) publications)))
+
+
+let totalCitations publications = List.sumBy (fun (p:Publication) -> p.Citations) publications
+
