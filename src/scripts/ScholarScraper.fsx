@@ -203,7 +203,7 @@ let getKpiTableBody (page:HtmlDocument) =
         let citations = try Some (List.find (fun (key, _, _ ) -> (key = "Citations")) rawData) with | _ -> None
         let i10Index  = try Some (List.find (fun (key, _, _ ) -> (key = "i10-index")) rawData) with | _ -> None
         let hIndex    = try Some (List.find (fun (key, _, _ ) -> (key = "h-index")) rawData) with   | _ -> None
-        (mkBibMetrics (i10Index, hIndex, citations), mkRecentBibMetrics (i10Index, hIndex, citations), year)
+        (mkBibMetrics (hIndex,i10Index, citations), mkRecentBibMetrics (hIndex, i10Index, citations), year)
 
 let getKpiTableBodyFromList = function 
     | (p::_) -> Some (getKpiTableBody p)
