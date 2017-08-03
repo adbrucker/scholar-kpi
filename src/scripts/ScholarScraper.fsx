@@ -111,13 +111,16 @@ let parsePublicationTd follow tds =
                                                with
                                                  | _ -> None
                   let parseCitation (n:HtmlNode) = try
-                                                     int(n.InnerText())
+                                                      n.Descendants["a"]
+                                                        |> Seq.choose (fun (x:HtmlNode) -> x.TryGetAttribute("href")
+                                                                                          |> Option.map (fun a -> int(x.InnerText())))
+                                                        |> Seq.head 
                                                    with
                                                     | _ -> 0
                   let parseCitationId (n:HtmlNode) = try
                                                        n.Descendants["a"]
                                                         |> Seq.choose (fun (x:HtmlNode) -> x.TryGetAttribute("href")
-                                                                                         |> Option.map (fun a -> x.InnerText(), a.Value()))
+                                                                                          |> Option.map (fun a -> x.InnerText(), a.Value()))
                                                         |> Seq.head
                                                         |> snd
                                                         |> (fun s -> s.Split([| '='; '&' |]))
@@ -237,4 +240,5 @@ let loadPublicationList recursive authorId =
 
 (* Some simple tests ... *)
 let authorId= "ZWePF1QAAAAJ" 
-let publications = loadPublicationList false "ZWePF1QAAAAJ"     
+let publications = loadPublicationList false "ZWePF1QAAAAJ"
+
