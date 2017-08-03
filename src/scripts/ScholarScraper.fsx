@@ -126,9 +126,18 @@ let parsePublicationTd follow tds =
                                                         |> (fun s -> if isNull s || s = "" then None else Some s) 
                                                      with
                                                      | _ -> None
+                  let getTitle (n:HtmlNode)        = try
+                                                       n.Descendants["a"]
+                                                        |> Seq.choose (fun (x:HtmlNode) -> x.TryGetAttribute("href")
+                                                                                         |> Option.map (fun a -> x.InnerText(), a.Value()))
+                                                        |> Seq.head
+                                                        |> fst
+                                                        |> (fun s -> if isNull s || s = "" then None else Some s) 
+                                                     with
+                                                     | _ -> None
                   let citationHistory id  = if follow then getPaperCitationTable (getPaperCitationPage id) else []
                   match tds:HtmlNode list with
-                  | [a; citationNode; yearNode]     -> Publication((parseCitationId a).Value, a.InnerText(), parseYear yearNode, 
+                  | [a; citationNode; yearNode]     -> Publication((parseCitationId a).Value, (getTitle a).Value, parseYear yearNode, 
                                                                     parseCitationId citationNode, parseCitation citationNode, 
                                                                     citationHistory (parseCitationId a).Value)
                   | _                               -> Publication("", "", None, None, 0,[])
@@ -142,7 +151,7 @@ let getRowsOfTable (page:HtmlDocument) (rt:(string list)) id  = page.Descendants
                                                               |> Seq.toList
 let getTdListOfTable (page:HtmlDocument) id = getRowsOfTable page ["td"] id
 let getThListOfTable (page:HtmlDocument) id = List.concat (getRowsOfTable page ["th"] id) 
-let getPublicationTableBody (page:HtmlDocument) =  List.map (parsePublicationTd true) (getTdListOfTable page "gsc_a_t")
+let getPublicationTableBody (page:HtmlDocument) =  List.map (parsePublicationTd false) (getTdListOfTable page "gsc_a_t")
 
 let getPublicationTable authorPages = List.map getPublicationTableBody authorPages
                                     |> List.fold List.append List.empty
