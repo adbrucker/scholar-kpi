@@ -151,10 +151,10 @@ let getRowsOfTable (page:HtmlDocument) (rt:(string list)) id  = page.Descendants
                                                               |> Seq.toList
 let getTdListOfTable (page:HtmlDocument) id = getRowsOfTable page ["td"] id
 let getThListOfTable (page:HtmlDocument) id = List.concat (getRowsOfTable page ["th"] id) 
-let getPublicationTableBody (page:HtmlDocument) =  List.map (parsePublicationTd false) (getTdListOfTable page "gsc_a_t")
+let getPublicationTableBody recursive (page:HtmlDocument) =  List.map (parsePublicationTd recursive) (getTdListOfTable page "gsc_a_t")
 
-let getPublicationTable authorPages = List.map getPublicationTableBody authorPages
-                                    |> List.fold List.append List.empty
+let getPublicationTable recursive authorPages = List.map (getPublicationTableBody recursive) authorPages
+                                               |> List.fold List.append List.empty
  (*
 <table id="gsc_rsb_st">
   <tbody>
@@ -225,9 +225,9 @@ let citationYears (page:HtmlDocument) = page.Descendants["div"]
                                        |> Seq.map (fun n -> int (n.InnerText()))
                                        |> Seq.toList
 
-let loadPublicationList authorId = 
+let loadPublicationList recursive authorId = 
     let authorPages = getAuthorPages authorId
-    let publicationTableList = getPublicationTable authorPages
+    let publicationTableList = getPublicationTable recursive authorPages
     let metrics = getKpiTableBodyFromList authorPages
     match metrics with 
       | Some (m, rm, ry) -> PublicationList(authorId, DateTime.Now, publicationTableList, 
@@ -237,4 +237,4 @@ let loadPublicationList authorId =
 
 (* Some simple tests ... *)
 let authorId= "ZWePF1QAAAAJ" 
-let publications = loadPublicationList "ZWePF1QAAAAJ"     
+let publications = loadPublicationList false "ZWePF1QAAAAJ"     
