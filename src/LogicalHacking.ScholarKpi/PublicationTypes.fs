@@ -15,47 +15,47 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  *)
 
-namespace PublicationTypes
-
+namespace LogicalHacking.ScholarKpi.Core
 open System
 
-type Publication = 
-   struct
-   val Title:string
-   val Year: int option 
-   val Id: string
-   val CitationKey: string option
-   val Citations:int   
-   val CitationHistory: (int * int) list
-   new(id,title,year,citationKey, citations,citationHistory) = {Id=id; Title=title; 
-                                                                Year = year; 
-                                                                CitationKey = citationKey; 
-                                                                Citations=citations; 
-                                                                CitationHistory=citationHistory}
-end 
+module Types = 
+    type Publication = 
+       struct
+       val Title:string
+       val Year: int option 
+       val Id: string
+       val CitationKey: string option
+       val Citations:int   
+       val CitationHistory: (int * int) list
+       new(id,title,year,citationKey, citations,citationHistory) = {Id=id; Title=title; 
+                                                                    Year = year; 
+                                                                    CitationKey = citationKey; 
+                                                                    Citations=citations; 
+                                                                    CitationHistory=citationHistory}
+    end 
 
-type BibMetrics = 
-    struct
-    val HIndex: int
-    val I10Index: int 
-    val Citations: int 
-    new(hIndex, i10Index, citations) = {HIndex = hIndex; 
-                                        I10Index = i10Index; 
-                                        Citations=citations}
-end
+    type BibMetrics = 
+        struct
+        val HIndex: int
+        val I10Index: int 
+        val Citations: int 
+        new(hIndex, i10Index, citations) = {HIndex = hIndex; 
+                                            I10Index = i10Index; 
+                                            Citations=citations}
+    end
 
-type PublicationList = 
-    struct
-    val AuthorId: string
-    val DateTime: DateTime
-    val Publications: (Publication list)
-    val Metrics: BibMetrics option
-    val RecentMetrics: BibMetrics option
-    val RecentYear: int option
-    new(authorId, dateTime, publications, metrics, recentMetrics, recentYear) = {AuthorId=authorId;
-                                                                                 DateTime=dateTime;
-                                                                                 Publications=publications;
-                                                                                 Metrics=metrics;
-                                                                                 RecentMetrics=recentMetrics;
-                                                                                 RecentYear=recentYear}
-end
+    type PublicationList = 
+        struct
+        val AuthorId: string
+        val DateTime: DateTime
+        val Publications: (Publication list)
+        val Metrics: BibMetrics option
+        val RecentMetrics: BibMetrics option
+        val RecentYear: int option
+        new(authorId, dateTime, publications, metrics, recentMetrics, recentYear) = {AuthorId=authorId;
+                                                                                     DateTime=dateTime;
+                                                                                     Publications=publications;
+                                                                                     Metrics=metrics;
+                                                                                     RecentMetrics=recentMetrics;
+                                                                                     RecentYear=recentYear}
+    end
