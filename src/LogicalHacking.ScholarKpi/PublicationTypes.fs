@@ -1,5 +1,5 @@
 ﻿(* 
- * This file is part of the gscholar-kpi project. 
+ * This file is part of the scholar-kpi project. 
  * Copyright (c) 2017 Achim D. Brucker, https://www.brucker.ch
  * 
  * This program is free software: you can redistribute it and/or modify  
