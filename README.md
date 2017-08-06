@@ -4,8 +4,8 @@ based on the information available at the Google Scholar page of an author.
 
 # Installation 
 ```
- mono .paket/paket.bootstrapper.exe
- mono .paket/paket.exe install
+build.sh  // on mono (e.g., on Linux)
+build.cmd // on windows
 ```
 
 ## Team
