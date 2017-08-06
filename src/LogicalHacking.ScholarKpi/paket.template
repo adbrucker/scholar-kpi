@@ -1,0 +1,25 @@
+type project
+title
+    LogicalHacking.ScholarKpi
+owners
+    Achim D. Brucker <adbrucker@0x5f.org>
+authors 
+    Achim D. Brucker <adbrucker@0x5f.org>
+projectUrl
+    https://git.logicalhacking.com/adbrucker/scholar-kpi
+iconUrl
+    https://git.logicalhacking.com/adbrucker/scholar-kpi/master/docs/files/img/logo.png
+licenseUrl
+    https://git.logicalhacking.com/adbrucker/scholar-kpi/blob/master/LICENSE.txt
+requireLicenseAcceptance
+    false
+copyright
+    Copyright 2015
+tags
+    GoogleScholar WebScraping AcademicMetrics
+summary
+    A tool for analysing publication related key performance indicates (KPIs) based on the information available at the Google Scholar page of an author.
+description
+    A tool for analysing publication related key performance indicates (KPIs) based on the information available at the Google Scholar page of an author.
+
+
