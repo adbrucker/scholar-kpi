@@ -193,6 +193,7 @@ TestResults.xml
 nuget/*.nupkg
 release.cmd
 release.sh
+docs
 localpackages/
 paket-files
 *.orig
