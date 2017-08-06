@@ -1,4 +1,5 @@
 FSharp.Core
+Fsharp.Data
 group Test
 NUnit
 NUnit.Runners
