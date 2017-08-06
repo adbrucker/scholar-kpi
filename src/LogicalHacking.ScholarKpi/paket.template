@@ -2,9 +2,9 @@ type project
 title
     LogicalHacking.ScholarKpi
 owners
-    Achim D. Brucker <adbrucker@0x5f.org>
+    Achim D. Brucker
 authors 
-    Achim D. Brucker <adbrucker@0x5f.org>
+    Achim D. Brucker
 projectUrl
     https://git.logicalhacking.com/adbrucker/scholar-kpi
 iconUrl

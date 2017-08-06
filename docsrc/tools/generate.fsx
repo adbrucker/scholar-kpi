@@ -18,7 +18,7 @@ let githubLink = "https://git.logicalhacking.com/adbrucker/scholar-kpi"
 // Specify more information about your project
 let info =
   [ "project-name", "LogicalHacking.ScholarKpi"
-    "project-author", "Achim D. Brucker <adbrucker@0x5f.org>"
+    "project-author", "Achim D. Brucker"
     "project-summary", "A tool for analysing publication related key performance indicates (KPIs) based on the information available at the Google Scholar page of an author."
     "project-github", githubLink
     "project-nuget", "http://nuget.org/packages/LogicalHacking.ScholarKpi" ]

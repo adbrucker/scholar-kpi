@@ -36,7 +36,7 @@ let summary = "A tool for analysing publication related key performance indicate
 let description = "A tool for analysing publication related key performance indicates (KPIs) based on the information available at the Google Scholar page of an author."
 
 // List of author names (for NuGet package)
-let authors = [ "Achim D. Brucker <adbrucker@0x5f.org>" ]
+let authors = [ "Achim D. Brucker" ]
 
 // Tags for your project (for NuGet package)
 let tags = "GoogleScholar WebScraping AcademicMetrics"
