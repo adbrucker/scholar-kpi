@@ -21,8 +21,9 @@
 #load @"Metrics.fsx"
 
 open LogicalHacking.ScholarKpi.Core.Types
-open ScholarScraper
-open Metrics
+open LogicalHacking.ScholarKpi.Core.Metrics
+open LogicalHacking.ScholarKpi.Scraper.GoogleScholar
+
 let authorId= "ZWePF1QAAAAJ" 
 let publicationList = loadPublicationList false authorId
 let citations = totalCitations publicationList.Publications
