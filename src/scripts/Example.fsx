@@ -15,10 +15,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  *)
 
+#I "../../packages/FSharp.Data/lib/net40"
+#r "FSharp.Data.dll"
 #I "../../bin/LogicalHacking.ScholarKpi"
 #r "LogicalHacking.ScholarKpi.dll"
-
-#load @"Metrics.fsx"
 
 open LogicalHacking.ScholarKpi.Core.Types
 open LogicalHacking.ScholarKpi.Core.Metrics
