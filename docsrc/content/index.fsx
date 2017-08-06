@@ -63,5 +63,5 @@ redistribution for both commercial and non-commercial purposes. For more informa
   [gh]: https://github.com/fsprojects/LogicalHacking.ScholarKpi
   [issues]: https://github.com/fsprojects/LogicalHacking.ScholarKpi/issues
   [readme]: https://github.com/fsprojects/LogicalHacking.ScholarKpi/blob/master/README.md
-  [license]: https://github.com/fsprojects/LogicalHacking.ScholarKpi/blob/master/LICENSE.txt
+  [license]: https://github.com/fsprojects/LogicalHacking.ScholarKpi/blob/master/LICENSE
 *)
