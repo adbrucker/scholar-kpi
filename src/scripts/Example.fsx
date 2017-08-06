@@ -15,9 +15,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  *)
 
+#I "../../bin/LogicalHacking.ScholarKpi"
+#r "LogicalHacking.ScholarKpi.dll"
+
 #load @"Metrics.fsx"
 
-open PublicationTypes
+open LogicalHacking.ScholarKpi.Core.Types
 open ScholarScraper
 open Metrics
 let authorId= "ZWePF1QAAAAJ" 
