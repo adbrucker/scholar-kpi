@@ -2,6 +2,7 @@ FSharp.Core
 Fsharp.Data
 Fsharp.Configuration
 System.Data.Sqlite
+SQLProvider
 group Test
 NUnit
 NUnit.Runners
