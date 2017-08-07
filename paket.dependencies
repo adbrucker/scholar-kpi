@@ -11,6 +11,7 @@ source https://nuget.org/api/v2
 nuget Fsharp.Configuration
 nuget FSharp.Core ~> 4.0.0.1 redirects: force
 nuget Fsharp.Data
+nuget System.Data.Sqlite
 
 group Build
   source https://nuget.org/api/v2
