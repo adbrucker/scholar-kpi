@@ -68,7 +68,7 @@
     </When>
   </Choose>
   <Import Project="..\..\.paket\paket.targets" />
-  <ItemGroup Condition="Not Exists('$(MSBuildExtensionsPath32)')">
+  <ItemGroup Condition="!(Exists('$(MSBuildExtensionsPath32)'))">
     <Reference Include="Mono.Data.Sqlite" />
   </ItemGroup>
   <ItemGroup>
