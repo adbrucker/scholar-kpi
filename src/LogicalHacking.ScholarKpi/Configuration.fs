@@ -21,5 +21,6 @@ open FSharp.Configuration
 module Configuration = 
     let [<Literal>] DefaultConfig = "../../archive/conf/ScholarKpi.yaml"
     type Config = YamlConfig<DefaultConfig>
-    let cfg = Config()
+    let config= Config()
+    
  

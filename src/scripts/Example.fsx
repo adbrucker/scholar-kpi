@@ -17,15 +17,20 @@
 
 #I "../../packages/FSharp.Data/lib/net40"
 #r "FSharp.Data.dll"
+#I "../../packages/FSharp.Configuration/lib/net45"
+#r "FSharp.Configuration.dll"
+
 #I "../../bin/LogicalHacking.ScholarKpi"
 #r "LogicalHacking.ScholarKpi.dll"
 
 open LogicalHacking.ScholarKpi.Core.Types
 open LogicalHacking.ScholarKpi.Core.Metrics
 open LogicalHacking.ScholarKpi.Scraper.GoogleScholar
+open LogicalHacking.ScholarKpi.Core.Configuration
 
-let authorId= "ZWePF1QAAAAJ" 
-let publicationList = loadPublicationList false authorId
+open FSharp.Configuration
+
+let publicationList = loadPublicationList config.GoogleScholar.recursive config.GoogleScholar.author
 let citations = totalCitations publicationList.Publications
 let hIndex    = hIndex publicationList.Publications
 let i10Index = i10Index publicationList.Publications 
