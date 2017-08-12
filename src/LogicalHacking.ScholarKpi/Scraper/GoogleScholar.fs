@@ -59,8 +59,8 @@ module GoogleScholar =
     let rec tupleize = function 
                      | (x::xs), (y::ys) -> (x,y)::(tupleize (xs, ys)) 
                      | [], []           -> []
-                     | (x::xs), []      -> []
-                     | [], (y::ys)      -> []
+                     | (_::_), []      -> []
+                     | [], (_::_)      -> []
 
     let getCitationRow (page:HtmlDocument) id = page.Descendants["div"]
                                                |> Seq.filter(fun n -> n.TryGetAttribute("id") = Some(HtmlAttribute.New("id",id)))
@@ -111,7 +111,7 @@ module GoogleScholar =
                       let parseCitation (n:HtmlNode) = try
                                                           n.Descendants["a"]
                                                             |> Seq.choose (fun (x:HtmlNode) -> x.TryGetAttribute("href")
-                                                                                              |> Option.map (fun a -> int(x.InnerText())))
+                                                                                              |> Option.map (fun _ -> int(x.InnerText())))
                                                             |> Seq.head 
                                                        with
                                                         | _ -> 0
