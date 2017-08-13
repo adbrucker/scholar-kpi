@@ -1,0 +1,1 @@
+CREATE TABLE IF NOT EXISTS publications (id INTEGER PRIMARY KEY, value BLOB);

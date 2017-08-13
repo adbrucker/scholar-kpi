@@ -68,14 +68,12 @@
     </When>
   </Choose>
   <Import Project="..\..\.paket\paket.targets" />
-  <ItemGroup Condition="!(Exists('$(MSBuildExtensionsPath32)'))">
-    <Reference Include="Mono.Data.Sqlite" />
-  </ItemGroup>
   <ItemGroup>
     <Compile Include="PublicationTypes.fs" />
     <Compile Include="Metrics.fs" />
     <Compile Include="Configuration.fs" />
     <Compile Include="Scraper/GoogleScholar.fs" />
+    <Compile Include="Persistence/Sqlite.fs" />
     <None Include="paket.references" />
     <None Include="paket.template" />
     <Content Include="App.config" />
@@ -85,6 +83,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
+    <Reference Include="Mono.Data.Sqlite" />
   </ItemGroup>
   <Choose>
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3' Or $(TargetFrameworkVersion) == 'v4.7')">
