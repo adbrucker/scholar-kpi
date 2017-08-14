@@ -11,7 +11,7 @@ Dependencies are managed by paket, with the exception of
   ``configure.sh`` tries to set up everything nicely using a 
   system-wide installed ``Mono.Data.Sqlite.dll``. If this fails, 
   please follow the steps documented at the 
-  [SQLProvider website](http://fsprojects.github.io/SQLProvider/core/sqlite.html).
+  [SQLProvider website](https://fsprojects.github.io/SQLProvider/core/sqlite.html).
 * the ``sqlite3`` binary is used for creating an empty data base used 
   by the SQL type provider
 
@@ -38,7 +38,7 @@ Dependencies are managed by paket, with the exception of
   ```
 
 ## Team
-* [Achim D. Brucker](http://www.brucker.ch/)
+* [Achim D. Brucker](https://www.brucker.ch/)
 
 ## License
 This project is licensed under the GPL 3.0 (or any later version). 
