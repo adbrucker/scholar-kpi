@@ -152,10 +152,10 @@ module GoogleScholar =
                                                                   |> Seq.toList
     let getTdListOfTable (page:HtmlDocument) id = getRowsOfTable page ["td"] id
     let getThListOfTable (page:HtmlDocument) id = List.concat (getRowsOfTable page ["th"] id) 
-    let getPublicationTableBody recursive (page:HtmlDocument) =  List.map (parsePublicationTd recursive) (getTdListOfTable page "gsc_a_t")
+    let getPublicationTableBody scrapDetails (page:HtmlDocument) =  List.map (parsePublicationTd scrapDetails) (getTdListOfTable page "gsc_a_t")
 
-    let getPublicationTable recursive authorPages = List.map (getPublicationTableBody recursive) authorPages
-                                                   |> List.fold List.append List.empty
+    let getPublicationTable scrapDetails authorPages = List.map (getPublicationTableBody scrapDetails) authorPages
+                                                      |> List.fold List.append List.empty
      (*
     <table id="gsc_rsb_st">
       <tbody>
@@ -226,9 +226,9 @@ module GoogleScholar =
                                            |> Seq.map (fun n -> int (n.InnerText()))
                                            |> Seq.toList
 
-    let loadPublicationList recursive authorId = 
+    let loadPublicationList scrapDetails authorId = 
         let authorPages = getAuthorPages authorId
-        let publicationTableList = getPublicationTable recursive authorPages
+        let publicationTableList = getPublicationTable scrapDetails authorPages
         let metrics = getKpiTableBodyFromList authorPages
         match metrics with 
           | Some (m, rm, ry) -> PublicationList(authorId, DateTime.Now, publicationTableList, 
