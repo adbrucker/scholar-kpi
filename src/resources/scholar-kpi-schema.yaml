@@ -1,0 +1,33 @@
+Authors: 
+  - Author: "Author One" 
+    Sources:
+      - Service: "GoogleScholar"
+        AuthorId: "" 
+        FullDownload: yes
+      - Service: "Orcid"
+        AuthorId: ""
+        FullDownload: yes
+      - Service: "Dblp"
+        AuthorId: ""
+        FullDownload: yes
+      - name: "Pubzone"
+        AuthorId: ""        
+        FullDownload: yes
+      - Service: "AcmDl"
+        AuthorId: ""
+        FullDownload: yes
+      - Service: "CsNet"
+        AuthorId: ""
+        FullDownload: yes
+      - Service: "SemanticScholar"
+        AuthorId: ""
+        FullDownload: yes
+  - Author: "Author Two" 
+    Sources:
+      - Service: "GoogleScholar"
+        AuthorId: "" 
+        FullDownload: yes
+Arcive:
+  - Backend: FileArchive
+  - Backend: ZipArchive
+  - Backend: Sqlite
