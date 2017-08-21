@@ -17,6 +17,7 @@
 
 namespace LogicalHacking.ScholarKpi.Core
 open System
+open LogicalHacking.ScholarKpi.Core.Configuration
 
 module Types = 
     type Publication = 
@@ -48,12 +49,14 @@ module Types =
         struct
         val AuthorId: string
         val DateTime: DateTime
+        val DataSource: DataSource
         val Publications: (Publication list)
         val Metrics: BibMetrics option
         val RecentMetrics: BibMetrics option
         val RecentYear: int option
-        new(authorId, dateTime, publications, metrics, recentMetrics, recentYear) = {AuthorId=authorId;
+        new(authorId, dateTime, dataSource, publications, metrics, recentMetrics, recentYear) = {AuthorId=authorId;
                                                                                      DateTime=dateTime;
+                                                                                     DataSource=dataSource;
                                                                                      Publications=publications;
                                                                                      Metrics=metrics;
                                                                                      RecentMetrics=recentMetrics;

@@ -22,6 +22,7 @@ open System.Threading
 open System.IO
 open System.Net
 open LogicalHacking.ScholarKpi.Core.Types
+open LogicalHacking.ScholarKpi.Core.Configuration
 open FSharp.Data
 
 module GoogleScholar = 
@@ -231,7 +232,7 @@ module GoogleScholar =
         let publicationTableList = getPublicationTable scrapDetails authorPages
         let metrics = getKpiTableBodyFromList authorPages
         match metrics with 
-          | Some (m, rm, ry) -> PublicationList(authorId, DateTime.Now, publicationTableList, 
+          | Some (m, rm, ry) -> PublicationList(authorId, DateTime.Now, GoogleScholar, publicationTableList, 
                                                  m, rm, ry)  
-          | None   -> PublicationList(authorId, DateTime.Now, publicationTableList, 
+          | None   -> PublicationList(authorId, DateTime.Now, GoogleScholar, publicationTableList, 
                                        None, None, None)
