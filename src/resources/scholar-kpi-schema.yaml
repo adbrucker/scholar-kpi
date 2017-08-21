@@ -3,30 +3,30 @@ Authors:
     Sources:
       - Service: "GoogleScholar"
         AuthorId: "" 
-        FullDownload: yes
+        FullDownload: true
       - Service: "Orcid"
         AuthorId: ""
-        FullDownload: yes
+        FullDownload: true
       - Service: "Dblp"
         AuthorId: ""
-        FullDownload: yes
+        FullDownload: true
       - name: "Pubzone"
         AuthorId: ""        
-        FullDownload: yes
+        FullDownload: true
       - Service: "AcmDl"
         AuthorId: ""
-        FullDownload: yes
+        FullDownload: true
       - Service: "CsNet"
         AuthorId: ""
-        FullDownload: yes
+        FullDownload: true
       - Service: "SemanticScholar"
         AuthorId: ""
-        FullDownload: yes
+        FullDownload: true
   - Author: "Author Two" 
     Sources:
       - Service: "GoogleScholar"
         AuthorId: "" 
-        FullDownload: yes
+        FullDownload: true
 Arcive:
   - Backend: FileArchive
   - Backend: ZipArchive
