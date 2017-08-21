@@ -20,12 +20,41 @@ open FSharp.Configuration
 
 module Configuration = 
     let [<Literal>] ConfigSchema      =  __SOURCE_DIRECTORY__+ @"/../resources/scholar-kpi-schema.yaml"
-    let [<Literal>] DefaultConfigFile = __SOURCE_DIRECTORY__+ @"/../../resources/scholar-kpi.yaml"
+    let [<Literal>] DefaultConfigFile = __SOURCE_DIRECTORY__+ @"/../../archive/conf/scholar-kpi.yaml"
     type ScholarKpiConfig = YamlConfig<ConfigSchema>
-    let config= ScholarKpiConfig()
 
-    let load (config:ScholarKpiConfig) = function
-                                         | Some (cfg:string) -> config.Load(cfg)
-                                         | None              -> config.Load(DefaultConfigFile)
-    
+    let loadCfg (config:ScholarKpiConfig) = function
+                                         | Some (cfg:string) -> config.Load(cfg); config
+                                         | None              -> config.Load(DefaultConfigFile); config
+                                         
+    let mkCfg = loadCfg(ScholarKpiConfig())
 
+    type GoogleCfg = struct 
+            val authorId: string
+            val full: bool 
+         end
+
+    type DataSources = GoogleScholar | Orcid | Dblp | Pubzone | AcmDl | CsNet | SemanticScholar 
+
+    let dataSourceToYamlString = function 
+                                 | GoogleScholar   -> "GoogleScholar"
+                                 | Orcid           -> "Orcid"
+                                 | Dblp            -> "Dblp"
+                                 | Pubzone         -> "Pubzone"
+                                 | AcmDl           -> "AcmDl"
+                                 | CsNet           -> "CsNet"
+                                 | SemanticScholar -> "SemanticScholar" 
+
+    type DataSourceCfg = struct
+        val Service  : DataSources
+        val AuthorId : string
+        val FullDownload : bool
+        new (service, authorId, fullDownload) = {Service = service; AuthorId = authorId; FullDownload=fullDownload}
+    end
+
+    let getDataSourceCfg (cfg:ScholarKpiConfig) (src:DataSources) author = 
+         match (Seq.filter (fun (a:ScholarKpiConfig.Authors_Item_Type) -> a.Author.Equals(author)) cfg.Authors) |> Seq.toList with 
+           | []      -> None
+           | (x::xs) -> match (Seq.filter (fun (s:ScholarKpiConfig.Authors_Item_Type.Sources_Item_Type) -> s.Service = dataSourceToYamlString GoogleScholar)  x.Sources) |> Seq.toList with
+                         | []      -> None
+                         | (y::ys) -> Some (DataSourceCfg(src, y.AuthorId, y.FullDownload))

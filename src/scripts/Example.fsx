@@ -30,7 +30,11 @@ open LogicalHacking.ScholarKpi.Core.Configuration
 
 open FSharp.Configuration
 
-let publicationList = loadPublicationList config.GoogleScholar.recursive config.GoogleScholar.author
+let config= mkCfg None
+
+let googleCfg = (getDataSourceCfg config GoogleScholar "Achim D. Brucker").Value
+
+let publicationList = loadPublicationList googleCfg.FullDownload googleCfg.AuthorId
 let citations = totalCitations publicationList.Publications
 let hIndex    = hIndex publicationList.Publications
 let i10Index = i10Index publicationList.Publications 
