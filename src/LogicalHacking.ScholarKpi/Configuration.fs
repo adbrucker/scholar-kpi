@@ -29,11 +29,6 @@ module Configuration =
                                          
     let mkCfg = loadCfg(ScholarKpiConfig())
 
-    type GoogleCfg = struct 
-            val authorId: string
-            val full: bool 
-         end
-
     type DataSources = GoogleScholar | Orcid | Dblp | Pubzone | AcmDl | CsNet | SemanticScholar 
 
     let dataSourceToYamlString = function 
