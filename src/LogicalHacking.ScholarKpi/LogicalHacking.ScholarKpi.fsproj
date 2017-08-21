@@ -73,6 +73,7 @@
     <Compile Include="Metrics.fs" />
     <Compile Include="Configuration.fs" />
     <Compile Include="Scraper/GoogleScholar.fs" />
+    <Compile Include="Scraper/Scraper.fs" />
     <Compile Include="Persistence/Sqlite.fs" />
     <None Include="paket.references" />
     <None Include="paket.template" />

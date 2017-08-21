@@ -25,7 +25,7 @@
 
 open LogicalHacking.ScholarKpi.Core.Types
 open LogicalHacking.ScholarKpi.Core.Metrics
-open LogicalHacking.ScholarKpi.Scraper.GoogleScholar
+open LogicalHacking.ScholarKpi.Scraper.Scraper
 open LogicalHacking.ScholarKpi.Core.Configuration
 
 open FSharp.Configuration
@@ -34,7 +34,7 @@ let config= mkCfg None
 
 let googleCfg = (getDataSourceCfg config GoogleScholar "Achim D. Brucker").Value
 
-let publicationList = loadPublicationList googleCfg.FullDownload googleCfg.AuthorId
+let publicationList = scrapDataSource googleCfg
 let citations = totalCitations publicationList.Publications
 let hIndex    = hIndex publicationList.Publications
 let i10Index = i10Index publicationList.Publications 
