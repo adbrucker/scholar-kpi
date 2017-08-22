@@ -27,7 +27,7 @@ Authors:
       - Service: "GoogleScholar"
         AuthorId: "" 
         FullDownload: true
-Arcive:
+Archive:
   - Backend: FileArchive
   - Backend: ZipArchive
   - Backend: Sqlite
