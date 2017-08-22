@@ -29,7 +29,7 @@ module Configuration =
                                          
     let mkCfg = loadCfg(ScholarKpiConfig())
 
-    type DataSources = GoogleScholar | Orcid | Dblp | Pubzone | AcmDl | CsNet | SemanticScholar 
+    type DataSource = GoogleScholar | Orcid | Dblp | Pubzone | AcmDl | CsNet | SemanticScholar 
 
     let dataSourceToYamlString = function 
                                  | GoogleScholar   -> "GoogleScholar"
@@ -41,13 +41,13 @@ module Configuration =
                                  | SemanticScholar -> "SemanticScholar" 
 
     type DataSourceCfg = struct
-        val Service  : DataSources
+        val Service  : DataSource
         val AuthorId : string
         val FullDownload : bool
         new (service, authorId, fullDownload) = {Service = service; AuthorId = authorId; FullDownload=fullDownload}
     end
 
-    let getDataSourceCfg (cfg:ScholarKpiConfig) (src:DataSources) author = 
+    let getDataSourceCfg (cfg:ScholarKpiConfig) (src:DataSource) author = 
          match (Seq.filter (fun (a:ScholarKpiConfig.Authors_Item_Type) -> a.Author.Equals(author)) cfg.Authors) |> Seq.toList with 
            | []      -> None
            | (x::xs) -> match (Seq.filter (fun (s:ScholarKpiConfig.Authors_Item_Type.Sources_Item_Type) -> s.Service = dataSourceToYamlString GoogleScholar)  x.Sources) |> Seq.toList with
