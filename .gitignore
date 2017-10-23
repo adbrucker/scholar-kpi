@@ -114,6 +114,7 @@ packages
 # Packet lock file 
 paket.lock
 .paket/paket.exe
+.paket/Paket.Restore.targets
 
 # Windows Azure Build Output
 csx
