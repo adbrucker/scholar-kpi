@@ -20,17 +20,17 @@ namespace LogicalHacking.ScholarKpi.Core
 open LogicalHacking.ScholarKpi.Core.Types
 
 module Metrics = 
-    let pubSince year publications = List.filter (fun (p:Publication) -> p.Year >= Some year) publications
+    let pubSince year (publications:PublicationList) = List.filter (fun (p:Publication) -> p.Year >= Some year) publications.Publications
                                                      
 
-    let i10Index publications= List.length (List.filter (fun (p:Publication) -> p.Citations > 9) publications)
+    let i10Index (publications:PublicationList) = List.length (List.filter (fun (p:Publication) -> p.Citations > 9) publications.Publications)
 
-    let hIndex publications= 
+    let hIndex (publications:PublicationList)= 
            let rec hIndexRec i = function 
                                | (c::cs) -> if c  >= (i+1) then hIndexRec (i+1) cs else i 
                                | []      -> i
-           hIndexRec 0 (List.rev (List.sort (List.map (fun (p:Publication) -> p.Citations) publications)))
+           hIndexRec 0 (List.rev (List.sort (List.map (fun (p:Publication) -> p.Citations) publications.Publications)))
 
 
-    let totalCitations publications = List.sumBy (fun (p:Publication) -> p.Citations) publications
+    let totalCitations (publications:PublicationList) = List.sumBy (fun (p:Publication) -> p.Citations) publications.Publications
 

@@ -16,14 +16,16 @@
  *)
 
 module LogicalHacking.ScholarKpi.Tests
-
+open System
 open LogicalHacking.ScholarKpi.Core.Metrics
 open NUnit.Framework
-
+open LogicalHacking.ScholarKpi.Core.Configuration
+open LogicalHacking.ScholarKpi.Core.Types
 
 [<Test>]
 let ``i10-index of empty list is 0`` () =
-  let result = i10Index [] 
+  let emptyPublicationList = PublicationList("Joe Doe", DateTime.Now, GoogleScholar, [], None, None, None)
+  let result = i10Index emptyPublicationList
   printfn "%i" result
   Assert.AreEqual(0,result)
 

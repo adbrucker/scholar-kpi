@@ -20,6 +20,9 @@
 #I "../../packages/FSharp.Configuration/lib/net45"
 #r "FSharp.Configuration.dll"
 
+#I "../../packages/SQLProvider/lib"
+#r "FSharp.Data.SqlProvider.dll"
+
 #I "../../bin/LogicalHacking.ScholarKpi"
 #r "LogicalHacking.ScholarKpi.dll"
 
@@ -27,14 +30,31 @@ open LogicalHacking.ScholarKpi.Core.Types
 open LogicalHacking.ScholarKpi.Core.Metrics
 open LogicalHacking.ScholarKpi.Scraper.Scraper
 open LogicalHacking.ScholarKpi.Core.Configuration
+open LogicalHacking.ScholarKpi.Persistence.sqlite
 
 open FSharp.Configuration
 
 let config= mkCfg None
 
+let ctx = getCtx (Some "/tmp/") Default
+let con = ctx.CreateConnection();
+
+
+
+(* Workaround for SSL cert errof - just trust everything *)
+open System.Net
+open System.IO
+ServicePointManager.ServerCertificateValidationCallback <-
+  System.Net.Security.RemoteCertificateValidationCallback(fun _ _ _ _ -> true)
+(* *)
+
+
+let row = ctx.Main.Publications.Create()
+
+
 let googleCfg = (getDataSourceCfg config GoogleScholar "Achim D. Brucker").Value
 
 let publicationList = scrapDataSource googleCfg
-let citations = totalCitations publicationList.Publications
-let hIndex    = hIndex publicationList.Publications
-let i10Index = i10Index publicationList.Publications 
+let citations = totalCitations publicationList
+let hIndex    = hIndex publicationList
+let i10Index = i10Index publicationList
