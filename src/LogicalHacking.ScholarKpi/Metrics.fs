@@ -34,3 +34,4 @@ module Metrics =
 
     let totalCitations (publications:PublicationList) = List.sumBy (fun (p:Publication) -> p.Citations) publications.Publications
 
+    let totalPublications  (publications:PublicationList) = List.length publications.Publications

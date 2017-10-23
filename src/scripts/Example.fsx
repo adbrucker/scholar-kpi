@@ -55,6 +55,7 @@ let row = ctx.Main.Publications.Create()
 let googleCfg = (getDataSourceCfg config GoogleScholar "Achim D. Brucker").Value
 
 let publicationList = scrapDataSource googleCfg
+let totalPubs = totalPublications publicationList
 let citations = totalCitations publicationList
 let hIndex    = hIndex publicationList
 let i10Index = i10Index publicationList
