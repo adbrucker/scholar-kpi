@@ -44,11 +44,11 @@ module GoogleScholar =
     let getCitingPapersPage citationId = let url = "https://scholar.google.com/scholar?cites="+
                                                     citationId
                                          loadUrlWithDelay None url
-            
+
     let hasNextAuthorPage (ap:HtmlDocument) = ap.Descendants["button"]
                                             |> Seq.filter (fun n -> 
-                                                            n.TryGetAttribute("aria-label") = 
-                                                             Some(HtmlAttribute.New("aria-label","Next")))
+                                                            n.TryGetAttribute("id") = 
+                                                             Some(HtmlAttribute.New("id","gsc_bpf_more")))
                                             |> (Seq.exists (fun n -> n.TryGetAttribute("disabled") = None))
 
     let getAuthorPages author = let rec getAuthorPagesRec author n = let page = getAuthorPage author n
