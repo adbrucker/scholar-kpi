@@ -22,8 +22,10 @@ open LogicalHacking.ScholarKpi.Core.Types
 module Metrics = 
     let pubSince year (publications:PublicationList) = List.filter (fun (p:Publication) -> p.Year >= Some year) publications.Publications
                                                      
+    let getPublicationsWihAtLeastNCitations n (publications:PublicationList) = List.filter (fun (p:Publication) -> p.Citations >= n) publications.Publications
 
-    let i10Index (publications:PublicationList) = List.length (List.filter (fun (p:Publication) -> p.Citations > 9) publications.Publications)
+    let iNIndex n (publications:PublicationList) = getPublicationsWihAtLeastNCitations n publications |> List.length
+    let i10Index = iNIndex 10 
 
     let hIndex (publications:PublicationList)= 
            let rec hIndexRec i = function 
