@@ -21,7 +21,9 @@ open LogicalHacking.ScholarKpi.Core.Types
 
 module Metrics = 
     let pubSince year (publications:PublicationList) = List.filter (fun (p:Publication) -> p.Year >= Some year) publications.Publications
-                                                     
+
+    let getNMostCitedPublications n (publications:PublicationList) = List.take n (List.sortBy (fun (p:Publication) -> p.Citations) (publications.Publications))
+
     let getPublicationsWihAtLeastNCitations n (publications:PublicationList) = List.filter (fun (p:Publication) -> p.Citations >= n) publications.Publications
 
     let iNIndex n (publications:PublicationList) = getPublicationsWihAtLeastNCitations n publications |> List.length
