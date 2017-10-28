@@ -22,10 +22,22 @@ open NUnit.Framework
 open LogicalHacking.ScholarKpi.Core.Configuration
 open LogicalHacking.ScholarKpi.Core.Types
 
+let emptyPublicationList = PublicationList("Joe Doe", DateTime.Now, GoogleScholar, [], None, None, None)
+let smallPublicationList = PublicationList("Joe Doe", DateTime.Now, GoogleScholar, 
+                           [ Publication("id-0", "A Title", Some 2015, None, 15, []);
+                             Publication("id-1", "Another Title", Some 2016, None, 10, []);
+                             Publication("id-2", "Yet Another Title", Some 2017, None,  1, []) 
+                           ], None, None, None)
+
 [<Test>]
 let ``i10-index of empty list is 0`` () =
-  let emptyPublicationList = PublicationList("Joe Doe", DateTime.Now, GoogleScholar, [], None, None, None)
   let result = i10Index emptyPublicationList
   printfn "%i" result
   Assert.AreEqual(0,result)
+
+[<Test>]
+let ``i10-index of small example  list is 2`` () =
+  let result = i10Index smallPublicationList
+  printfn "%i" result
+  Assert.AreEqual(2,result)
 
