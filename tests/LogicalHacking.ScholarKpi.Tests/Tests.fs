@@ -41,3 +41,15 @@ let ``i10-index of small example  list is 2`` () =
   printfn "%i" result
   Assert.AreEqual(2,result)
 
+[<Test>]
+let ``h-index of empty list is 0`` () =
+  let result = hIndex emptyPublicationList
+  printfn "%i" result
+  Assert.AreEqual(0,result)
+
+[<Test>]
+let ``h-index of small example  list is 2`` () =
+  let result = hIndex smallPublicationList
+  printfn "%i" result
+  Assert.AreEqual(2,result)
+
