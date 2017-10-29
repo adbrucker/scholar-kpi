@@ -39,3 +39,5 @@ module Metrics =
     let totalCitations (publications:PublicationList) = List.sumBy (fun (p:Publication) -> p.Citations) publications.Publications
 
     let totalPublications  (publications:PublicationList) = List.length publications.Publications
+
+    let averageCitations  (publications:PublicationList) = float(totalCitations publications) / float(totalPublications publications)
