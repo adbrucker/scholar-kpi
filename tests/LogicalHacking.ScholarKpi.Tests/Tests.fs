@@ -30,6 +30,18 @@ let smallPublicationList = PublicationList("Joe Doe", DateTime.Now, GoogleSchola
                            ], None, None, None)
 
 [<Test>]
+let ``Total number of publications of empty list is 0`` () =
+  let result = totalPublications emptyPublicationList
+  printfn "%i" result
+  Assert.AreEqual(0,result)
+
+[<Test>]
+let ```Total number of publications of small example  list is 3`` () =
+  let result = totalPublications smallPublicationList
+  printfn "%i" result
+  Assert.AreEqual(3,result)
+
+[<Test>]
 let ``i10-index of empty list is 0`` () =
   let result = i10Index emptyPublicationList
   printfn "%i" result
