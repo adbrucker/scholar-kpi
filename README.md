@@ -45,3 +45,9 @@ This project is licensed under the GPL 3.0 (or any later version).
 
 SPDX-License-Identifier: GPL-3.0-or-later 
 
+## Master Repository
+
+The master git repository for this project is hosted by the [Software
+Assurance & Security Research Team](https://logicalhacking.com) at
+https://git.logicalhacking.com/adbrucker/scholar-kpi
+
