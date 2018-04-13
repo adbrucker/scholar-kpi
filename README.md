@@ -41,4 +41,7 @@ Dependencies are managed by paket, with the exception of
 * [Achim D. Brucker](https://www.brucker.ch/)
 
 ## License
-This project is licensed under the GPL 3.0 (or any later version). 
+This project is licensed under the GPL 3.0 (or any later version).
+
+SPDX-License-Identifier: GPL-3.0-or-later 
+
