@@ -350,18 +350,22 @@ Target "All" DoNothing
   ==> "Build"
   ==> "CopyBinaries"
   ==> "RunTests"
+(*
   ==> "GenerateReferenceDocs"
   ==> "GenerateDocs"
+*)
   ==> "NuGet"
   ==> "BuildPackage"
   ==> "All"
 
+(*
 "GenerateHelp"
   ==> "GenerateReferenceDocs"
   ==> "GenerateDocs"
 
 "GenerateHelpDebug"
   ==> "KeepRunning"
+*)
 
 "Clean"
   ==> "Release"

@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  *)
 
-#I "../../packages/FSharp.Data/lib/net40"
+#I "../../packages/FSharp.Data/lib/net45"
 #r "FSharp.Data.dll"
 #I "../../packages/FSharp.Configuration/lib/net45"
 #r "FSharp.Configuration.dll"

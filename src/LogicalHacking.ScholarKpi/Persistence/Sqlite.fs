@@ -34,7 +34,6 @@ namespace LogicalHacking.ScholarKpi.Persistence
                                      // ResolutionPath = ResolutionPath,
                                      IndividualsAmount = 500,
                                      UseOptionTypes = true >
-
         type ExtensionDbType = ExtensionDbProvider.dataContext
 
         type Db = Default | Custom of string
