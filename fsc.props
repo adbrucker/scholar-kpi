@@ -1,3 +1,4 @@
+<!-- see https://github.com/Microsoft/visualfsharp/issues/3303 -->
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
   <!-- Type providers currently can't run inside the .NET Core 2.0 hosted compiler, see https://github.com/Microsoft/visualfsharp/pull/3658#issuecomment-334773415 -->
