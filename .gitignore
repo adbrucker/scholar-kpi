@@ -183,3 +183,12 @@ docsrc/content/license.md
 docsrc/content/release-notes.md
 .fake
 docsrc/tools/FSharp.Formatting.svclog
+
+# misc paket files
+.paket/paket.exe
+paket.lock
+
+# the sqlite database schema used by the type provider
+src/resources/scholar-kpi-schema.sqlite
+
+
