@@ -25,15 +25,17 @@ if test "$OS" = "Windows_NT"
 then
   echo "Please install System.Data.SQLite.dll into packages/SQLProvider/lib." 
 else
-  if [ -f /usr/lib/mono/4.5/Mono.Data.Sqlite.dll ];
-  then
-    if [ ! -f packages/SQLProvider/lib/Mono.Data.Sqlite.dll ];
-    then
-      ln -s /usr/lib/mono/4.5/Mono.Data.Sqlite.dll  packages/SQLProvider/lib 
-    fi
-  else
-    echo "Please install Mono.Data.Sqlite.dll into packages/SQLProvider/lib." 
-  fi
+  echo "Building libSQLite.Interop.so"
+  BUILDIR=$(mktemp -d)
+  CWD=$(pwd)
+  cd $BUILDIR
+  curl -o sqlite-netFx-source-1.0.108.0.zip https://system.data.sqlite.org/blobs/1.0.108.0/sqlite-netFx-source-1.0.108.0.zip
+  unzip sqlite-netFx-source-1.0.108.0.zip
+  bash Setup/compile-interop-assembly-release.sh
+  mkdir -p $CWD/packages/System.Data.SQLite.Core/lib/net451/libSQLite.Interop.so
+  cp bin/2013/Release/bin/libSQLite.Interop.so $CWD/packages/System.Data.SQLite.Core/lib/net451/libSQLite.Interop.so
+  cd $CWD
+  rm -rf $BUILDIR
 fi
 
 echo "Creating empty database for type provider."

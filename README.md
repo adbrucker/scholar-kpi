@@ -8,9 +8,8 @@ time.
 # Dependencies
 Dependencies are managed by paket, with the exception of 
 * the SQLite libraries required by the SQLProvider. For Mono, 
-  ``configure.sh`` tries to set up everything nicely using a 
-  system-wide installed ``Mono.Data.Sqlite.dll``. If this fails, 
-  please follow the steps documented at the 
+  ``configure.sh`` tries to set up everything automatically.
+  If this fails, please follow the steps documented at the 
   [SQLProvider website](https://fsprojects.github.io/SQLProvider/core/sqlite.html).
 * the ``sqlite3`` binary is used for creating an empty data base used 
   by the SQL type provider
