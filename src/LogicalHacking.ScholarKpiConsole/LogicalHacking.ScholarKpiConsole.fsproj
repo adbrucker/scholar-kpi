@@ -15,7 +15,9 @@
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LogicalHacking.ScholarKpi\LogicalHacking.ScholarKpi.fsproj"></ProjectReference>
+    <ProjectReference Include="..\LogicalHacking.ScholarKpi\LogicalHacking.ScholarKpi.fsproj">
+    </ProjectReference>
   </ItemGroup>
+  <Import Project="..\..\fsc.props" />
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

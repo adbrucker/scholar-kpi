@@ -21,5 +21,6 @@
     <ProjectReference Include="..\..\src\LogicalHacking.ScholarKpi\LogicalHacking.ScholarKpi.fsproj">
     </ProjectReference>
   </ItemGroup>
+  <Import Project="..\..\fsc.props" />
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>
