@@ -15,53 +15,59 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  *)
 
-module LogicalHacking.ScholarKpi.Tests
+namespace LogicalHacking.ScholarKpi.Tests
+
 open System
+
 open LogicalHacking.ScholarKpi.Core.Metrics
-open NUnit.Framework
 open LogicalHacking.ScholarKpi.Core.Configuration
 open LogicalHacking.ScholarKpi.Core.Types
 
-let emptyPublicationList = PublicationList("Joe Doe", DateTime.Now, GoogleScholar, [], None, None, None)
-let smallPublicationList = PublicationList("Joe Doe", DateTime.Now, GoogleScholar, 
-                           [ Publication("id-0", "A Title", Some 2015, None, 15, []);
-                             Publication("id-1", "Another Title", Some 2016, None, 10, []);
-                             Publication("id-2", "Yet Another Title", Some 2017, None,  1, []) 
-                           ], None, None, None)
+open Expecto
+open FsCheck
+(* open GeneratorsCode *)
 
-[<Test>]
-let ``Total number of publications of empty list is 0`` () =
-  let result = totalPublications emptyPublicationList
-  printfn "%i" result
-  Assert.AreEqual(0,result)
+module Tests = 
+    let emptyPublicationList = PublicationList("Joe Doe", DateTime.Now, GoogleScholar, [], None, None, None)
+    let smallPublicationList = PublicationList("Joe Doe", DateTime.Now, GoogleScholar, 
+                               [ Publication("id-0", "A Title", Some 2015, None, 15, []);
+                                 Publication("id-1", "Another Title", Some 2016, None, 10, []);
+                                 Publication("id-2", "Yet Another Title", Some 2017, None,  1, []) 
+                               ], None, None, None)
 
-[<Test>]
-let ```Total number of publications of small example  list is 3`` () =
-  let result = totalPublications smallPublicationList
-  printfn "%i" result
-  Assert.AreEqual(3,result)
+    let config10k = { FsCheckConfig.defaultConfig with maxTest = 10000}
+    // bug somewhere:  registering arbitrary generators causes Expecto VS test adapter not to work
+    //let config10k = { FsCheckConfig.defaultConfig with maxTest = 10000; arbitrary = [typeof<Generators>] }
+    let configReplay = { FsCheckConfig.defaultConfig with maxTest = 10000 ; replay = Some <| (1940624926, 296296394) }
 
-[<Test>]
-let ``i10-index of empty list is 0`` () =
-  let result = i10Index emptyPublicationList
-  printfn "%i" result
-  Assert.AreEqual(0,result)
+    [<Tests>]
+    let testSimpleTests =
 
-[<Test>]
-let ``i10-index of small example  list is 2`` () =
-  let result = i10Index smallPublicationList
-  printfn "%i" result
-  Assert.AreEqual(2,result)
+        testList "DomainTypes.Tag" [
+            testCase "equality" <| fun () ->
+                let result = 42
+                Expect.isTrue (result = 42) "Expected True"
 
-[<Test>]
-let ``h-index of empty list is 0`` () =
-  let result = hIndex emptyPublicationList
-  printfn "%i" result
-  Assert.AreEqual(0,result)
+            testCase "Total number of publications of empty list is 0" <| fun () -> 
+                let result = totalPublications emptyPublicationList
+                Expect.isTrue (result = 0) "Expected True"
 
-[<Test>]
-let ``h-index of small example  list is 2`` () =
-  let result = hIndex smallPublicationList
-  printfn "%i" result
-  Assert.AreEqual(2,result)
+            testCase "Total number of publications of small example  list is 3`" <| fun () ->
+                let result = totalPublications smallPublicationList
+                Expect.isTrue (result = 3) "Expected True"
 
+            testCase "i10-index of empty list is 0" <| fun () ->
+                let result = i10Index emptyPublicationList
+                Expect.isTrue (result = 0) "Expected True"
+
+            testCase "i10-index of small example  list is 2" <| fun () ->
+                let result = i10Index smallPublicationList
+                Expect.isTrue (result = 2) "Expected True"
+
+            testCase "h-index of empty list is 0" <| fun () ->
+                let result = hIndex emptyPublicationList
+                Expect.isTrue (result = 0) "Expected True"
+            testCase "h-index of small example  list is 2" <| fun () ->
+                let result = hIndex smallPublicationList
+                Expect.isTrue (result = 2) "Expected True"
+        ]
