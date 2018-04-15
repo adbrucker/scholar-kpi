@@ -1,7 +1,4 @@
-FSharp.Core
-
 Fsharp.Data
 Fsharp.Configuration
 System.Data.Sqlite
 SQLProvider
-
