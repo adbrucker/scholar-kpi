@@ -1,0 +1,33 @@
+Authors: 
+  - Author: "Achim D. Brucker" 
+    Sources:
+      - Service: "GoogleScholar"
+        AuthorId: "ZWePF1QAAAAJ" 
+        FullDownload: false
+      - Service: "Orcid"
+        AuthorId: "0000-0002-6355-1200"
+        FullDownload: false
+      - Service: "Dblp"
+        AuthorId: "Brucker:Achim_D"
+        FullDownload: false
+      - name: "Pubzone"
+        AuthorId: "b.AchimDBrucker"        
+        FullDownload: false
+      - Service: "AcmDl"
+        AuthorId: "81100615409"
+        FullDownload: false
+      - Service: "CsNet"
+        AuthorId: "achim-d-brucker"
+        FullDownload: false
+      - Service: "SemamnticScholar"
+        AuthorId: "1760227"
+        FullDownload: false
+  - Author: "Test Test" 
+    Sources:
+      - Service: "GoogleScholar"
+        AuthorId: "ZWePF1QAAAAJ" 
+        FullDownload: false
+Arcive:
+  - Backend: FileArchive
+  - Backend: ZipArchive
+  - Backend: Sqlite

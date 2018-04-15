@@ -1,4 +1,5 @@
-type project
+type file
+id LogicalHacking.ScholarKpi
 title
     LogicalHacking.ScholarKpi
 owners
@@ -8,13 +9,15 @@ authors
 projectUrl
     https://git.logicalhacking.com/adbrucker/scholar-kpi
 iconUrl
-    https://git.logicalhacking.com/adbrucker/scholar-kpi/master/docs/files/img/logo.png
+    https://raw.githubusercontent.com/adbrucker/scholar-kpi/master/docs/files/img/logo.png
 licenseUrl
-    https://git.logicalhacking.com/adbrucker/scholar-kpi/raw/master/LICENSE
+    https://git.logicalhacking.com/adbrucker/scholar-kpi/blob/master/LICENSE
 requireLicenseAcceptance
     false
+language
+    F#
 copyright
-    Copyright 2015
+    Copyright 2017
 tags
     GoogleScholar WebScraping AcademicMetrics
 summary
@@ -22,4 +25,5 @@ summary
 description
     A tool for analysing publication related key performance indicates (KPIs) based on the information available at the Google Scholar page of an author.
 
-
+files
+	../../bin/LogicalHacking.ScholarKpi ==> lib

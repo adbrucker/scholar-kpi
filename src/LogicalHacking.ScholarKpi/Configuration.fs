@@ -19,8 +19,8 @@ namespace LogicalHacking.ScholarKpi.Core
 open FSharp.Configuration
 
 module Configuration = 
-    let [<Literal>] ConfigSchema      =  __SOURCE_DIRECTORY__+ @"/../resources/scholar-kpi-schema.yaml"
-    let [<Literal>] DefaultConfigFile = __SOURCE_DIRECTORY__+ @"/../../archive/conf/scholar-kpi.yaml"
+    let [<Literal>] ConfigSchema      = __SOURCE_DIRECTORY__+ @"/../resources/scholar-kpi-schema.yaml"
+    let [<Literal>] DefaultConfigFile = __SOURCE_DIRECTORY__+ @"/../resources/scholar-kpi.yaml"
     type ScholarKpiConfig = YamlConfig<ConfigSchema>
 
     let loadCfg (config:ScholarKpiConfig) = function

@@ -20,7 +20,7 @@
 #I "../../packages/FSharp.Configuration/lib/net45"
 #r "FSharp.Configuration.dll"
 
-#I "../../packages/SQLProvider/lib"
+#I "../../packages/SQLProvider/lib/net451"
 #r "FSharp.Data.SqlProvider.dll"
 
 #I "../../bin/LogicalHacking.ScholarKpi"

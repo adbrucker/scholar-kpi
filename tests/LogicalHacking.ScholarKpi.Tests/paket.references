@@ -1,8 +1,13 @@
 FSharp.Core
+
 Fsharp.Data
 Fsharp.Configuration
 System.Data.Sqlite
 SQLProvider
-group Test
-NUnit
-NUnit.Runners
+
+Expecto
+Expecto.BenchmarkDotNet
+Expecto.FsCheck
+Expecto.VisualStudio.TestAdapter
+
+

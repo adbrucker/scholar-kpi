@@ -27,11 +27,12 @@ namespace LogicalHacking.ScholarKpi.Persistence
                                          + __SOURCE_DIRECTORY__
                                          + @"/../../resources/scholar-kpi-schema.sqlite"
                                          + @";Version=3"
+        let [<Literal>] ResolutionPath = __SOURCE_DIRECTORY__ + @"/../../../lib"
     // create a type alias with the connection string and database vendor settings
         type ExtensionDbProvider = SqlDataProvider< 
                                      ConnectionString = ConnectionString,
                                      DatabaseVendor = Common.DatabaseProviderTypes.SQLITE,
-                                     // ResolutionPath = ResolutionPath,
+                                     ResolutionPath = ResolutionPath,
                                      IndividualsAmount = 500,
                                      UseOptionTypes = true >
         type ExtensionDbType = ExtensionDbProvider.dataContext
