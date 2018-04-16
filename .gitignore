@@ -191,4 +191,5 @@ paket.lock
 # the sqlite database schema used by the type provider
 src/resources/scholar-kpi-schema.sqlite
 
-
+# docs
+docs
