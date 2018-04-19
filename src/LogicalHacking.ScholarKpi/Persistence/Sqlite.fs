@@ -20,7 +20,8 @@ namespace LogicalHacking.ScholarKpi.Persistence
     open System.IO
 
     module sqlite = 
-        let [<Literal>] Db = "scholar-kpi.sqlite"
+        let [<Literal>] Db =  __SOURCE_DIRECTORY__
+                              + @"/../../resources/scholar-kpi.sqlite"
         let [<Literal>]  DatabaseDir = "archive/db"
     // static (compile time)  ConnectionString
         let [<Literal>] ConnectionString = @"Data Source="
