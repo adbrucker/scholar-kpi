@@ -23,7 +23,7 @@
 #I "../../packages/SQLProvider/lib/net451"
 #r "FSharp.Data.SqlProvider.dll"
 
-#I "../../bin/LogicalHacking.ScholarKpi"
+#I "../../bin/LogicalHacking.ScholarKpi/net47"
 #r "LogicalHacking.ScholarKpi.dll"
 
 open LogicalHacking.ScholarKpi.Core.Types
