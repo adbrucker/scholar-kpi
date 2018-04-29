@@ -1,4 +1,7 @@
 #!/bin/bash
+SYSTEM_SQLITE_VERSION="1.0.108.0"
+SYSTEM_SQLITE_FRAMEWORK="net451"
+
 if test "$OS" = "Windows_NT"
 then
   MONO=""
@@ -23,17 +26,22 @@ if [ $exit_code -ne 0 ]; then
 fi
 if test "$OS" = "Windows_NT"
 then
-  echo "Please install System.Data.SQLite.dll into packages/SQLProvider/lib." 
+  echo "Please install System.Data.SQLite.dll." 
 else
-  echo "Building libSQLite.Interop.so"
+  echo "Installing libSQLite.Interop.so"
   BUILDIR=$(mktemp -d)
   CWD=$(pwd)
   cd $BUILDIR
-  curl -o sqlite-netFx-source-1.0.108.0.zip https://system.data.sqlite.org/blobs/1.0.108.0/sqlite-netFx-source-1.0.108.0.zip
-  unzip sqlite-netFx-source-1.0.108.0.zip
-  bash Setup/compile-interop-assembly-release.sh
-  mkdir -p $CWD/packages/System.Data.SQLite.Core/lib/net451/libSQLite.Interop.so
-  cp bin/2013/Release/bin/libSQLite.Interop.so $CWD/packages/System.Data.SQLite.Core/lib/net451/libSQLite.Interop.so
+  ARCHIVE=sqlite-netFx-source-$SYSTEM_SQLITE_VERSION.zip
+  echo "  Downloading $ARCHIVE"
+  curl -s -o $ARCHIVE https://system.data.sqlite.org/blobs/$SYSTEM_SQLITE_VERSION/$ARCHIVE > /dev/null
+  echo "  Extracting $ARCHIVE"
+  unzip -q $ARCHIVE > /dev/null
+  echo "  Compiling libSQLite.Interop.so"
+  bash Setup/compile-interop-assembly-release.sh > /dev/null
+  echo "  Installing libSQLite.Interop.so"
+  mkdir -p $CWD/packages/System.Data.SQLite.Core/lib/$SYSTEM_SQLITE_FRAMEWORK/
+  cp bin/2013/Release/bin/libSQLite.Interop.so $CWD/packages/System.Data.SQLite.Core/lib/$SYSTEM_SQLITE_FRAMEWORK/
   cd $CWD
   rm -rf $BUILDIR
 fi
