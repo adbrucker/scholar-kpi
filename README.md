@@ -21,28 +21,22 @@ Dependencies are managed by paket, with the exception of
 * On Linux/MacOs using mono:
   After cloning the repository, call
 
-        ```console
         ./configure.sh  
-        ```
 
   After that, the project can be build using
-        ```console
+
         ./build.sh
-        ```
 
 * On Windows (untested), you need to set up the initial project  
   manually:
 
-        ```console
         type src/resources/scholar-kpi-schema.sql | sqlite3 src/resources/scholar-kpi-schema.sqlite
         .paket/paket.bootstrapper.exe
         .paket/paket.exe install
-        ````
   
   After that, the project can be build using
-        ```console
+
         build.cmd
-        ```
 
 ## Team
 
