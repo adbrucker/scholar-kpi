@@ -41,16 +41,6 @@ let config= mkCfg None
 let ctx = getCtx (Some "/tmp/") Default
 let con = ctx.CreateConnection();
 
-
-
-(* Workaround for SSL cert errof - just trust everything *)
-open System.Net
-open System.IO
-ServicePointManager.ServerCertificateValidationCallback <-
-  System.Net.Security.RemoteCertificateValidationCallback(fun _ _ _ _ -> true)
-(* *)
-
-
 let row = ctx.Main.Publications.Create()
 
 
