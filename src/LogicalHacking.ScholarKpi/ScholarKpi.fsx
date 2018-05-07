@@ -17,19 +17,15 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  *)
 
-#load "ScholarKpi.fsx"
-let config= mkCfg None
+namespace LogicalHacking.ScholarKPI
 
-let ctx = getCtx (Some "/tmp/") Default
-let con = ctx.CreateConnection();
+#I "../../packages/FSharp.Data/lib/net45"
+#r "FSharp.Data.dll"
+#I "../../packages/FSharp.Configuration/lib/net45"
+#r "FSharp.Configuration.dll"
 
-let row = ctx.Main.Publications.Create()
+#I "../../packages/SQLProvider/lib/net451"
+#r "FSharp.Data.SqlProvider.dll"
 
-
-let googleCfg = (getDataSourceCfg config GoogleScholar "Achim D. Brucker").Value
-
-let publicationList = scrapDataSource googleCfg
-let totalPubs = totalPublications publicationList
-let citations = totalCitations publicationList
-let hIndex    = hIndex publicationList
-let i10Index = i10Index publicationList
+#I "../../bin/LogicalHacking.ScholarKpi/net47"
+#r "LogicalHacking.ScholarKpi.dll"
