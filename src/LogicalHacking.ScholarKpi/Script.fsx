@@ -18,6 +18,15 @@
  *)
 
 #load "ScholarKpi.fsx"
+
+open LogicalHacking.ScholarKpi.Core.Types
+open LogicalHacking.ScholarKpi.Core.Metrics
+open LogicalHacking.ScholarKpi.Scraper.Scraper
+open LogicalHacking.ScholarKpi.Core.Configuration
+open LogicalHacking.ScholarKpi.Persistence.sqlite
+
+open FSharp.Configuration
+
 let config= mkCfg None
 
 let ctx = getCtx (Some "/tmp/") Default
