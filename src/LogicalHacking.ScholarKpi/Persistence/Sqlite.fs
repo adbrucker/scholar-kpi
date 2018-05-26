@@ -43,10 +43,10 @@ namespace LogicalHacking.ScholarKpi.Persistence
 
         type Db = Default | Custom of string
 
-        let getCtx database  = match  database with
-                               | Default         -> ExtensionDbProvider.GetDataContext(
-                                                      sprintf "Data Source=%s/%s;Version=3" DbDir Db)
-                               | Custom customDb -> ExtensionDbProvider.GetDataContext(
-                                                      sprintf "Data Source=%s;Version=3" customDb)
- 
+        let getCtx database  = let dbFile = match  database with
+                                            | Default         -> Db
+                                            | Custom customDb -> customDb
+                               let conString = sprintf "Data Source=%s;Version=3" dbFile
+                               ExtensionDbProvider.GetDataContext(conString)
+
         let getPublications (ctx:ExtensionDbType)  _ = []
