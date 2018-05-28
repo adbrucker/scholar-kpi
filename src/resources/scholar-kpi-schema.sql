@@ -36,29 +36,29 @@ CREATE TABLE IF NOT EXISTS Publications (
     , Title STRING NOT NULL
     , Year INTEGER
     , CitationKey TEXT NOT NULL
-    , Citations INTEGER
+    , Citations INTEGER NOT NULL
     , FOREIGN KEY(PublicationListId) REFERENCES PublicationLists(PublicationListId)
 );
 
 
 CREATE TABLE IF NOT EXISTS CitationHistories (
       PublicationId INTEGER NOT NULL
-    , Year INTEGER
-    , Citations INTEGER
+    , Year INTEGER NOT NULL
+    , Citations INTEGER NOT NULL
     , FOREIGN KEY(PublicationId) REFERENCES Publications(PublicationId)
 );
 
 CREATE TABLE IF NOT EXISTS BibMetrics (
       PublicationListId INTEGER NOT NULL  
-    , I10Index INTEGER
-    , Citations INTEGER
+    , I10Index INTEGER NOT NULL
+    , Citations INTEGER NOT NULL
     , FOREIGN KEY(PublicationListId) REFERENCES PublicationLists(PublicationListId)
 );
 
 CREATE TABLE IF NOT EXISTS RecentBibMetrics (
       PublicationId INTEGER NOT NULL
-    , I10Index INTEGER
-    , Citations INTEGER
-    , Year INTEGER
+    , I10Index INTEGER NOT NULL
+    , Citations INTEGER NOT NULL
+    , Year INTEGER NOT NULL
     , FOREIGN KEY(PublicationId) REFERENCES Publications(PublicationId)
 );
