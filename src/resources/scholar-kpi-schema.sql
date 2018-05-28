@@ -23,37 +23,42 @@ CREATE TABLE IF NOT EXISTS ScholarKpi (
 
 INSERT INTO ScholarKpi VALUES (0);
 
+CREATE TABLE IF NOT EXISTS PublicationLists (
+      PublicationListId INTEGER PRIMARY KEY
+    , AuthorID TEXT  NOT NULL
+    , DateTime TEXT NOT NULL
+    , DataSource TEXT NOT NULL 
+);
+
 CREATE TABLE IF NOT EXISTS Publications (
-      Id INTEGER PRIMARY KEY
+      PublicationId INTEGER PRIMARY KEY
     , PublicationListId INTEGER NOT NULL  
     , Title STRING NOT NULL
     , Year INTEGER
     , CitationKey TEXT NOT NULL
     , Citations INTEGER
+    , FOREIGN KEY(PublicationListId) REFERENCES PublicationLists(PublicationListId)
 );
 
+
 CREATE TABLE IF NOT EXISTS CitationHistories (
-      PublicationId INTEGER PRIMARY KEY
+      PublicationId INTEGER NOT NULL
     , Year INTEGER
     , Citations INTEGER
+    , FOREIGN KEY(PublicationId) REFERENCES Publications(PublicationId)
 );
 
 CREATE TABLE IF NOT EXISTS BibMetrics (
-      PublicationListId INTEGER PRIMARY KEY
+      PublicationListId INTEGER NOT NULL  
     , I10Index INTEGER
     , Citations INTEGER
+    , FOREIGN KEY(PublicationListId) REFERENCES PublicationLists(PublicationListId)
 );
 
 CREATE TABLE IF NOT EXISTS RecentBibMetrics (
-      PublicationListId INTEGER PRIMARY KEY
+      PublicationId INTEGER NOT NULL
     , I10Index INTEGER
     , Citations INTEGER
     , Year INTEGER
-);
-
-CREATE TABLE IF NOT EXISTS PublicationLists (
-      Id INTEGER
-    , AuthorID TEXT  NOT NULL
-    , DateTime TEXT NOT NULL
-    , DataSource TEXT NOT NULL 
+    , FOREIGN KEY(PublicationId) REFERENCES Publications(PublicationId)
 );
