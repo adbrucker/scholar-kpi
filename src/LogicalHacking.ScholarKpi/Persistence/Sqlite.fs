@@ -30,7 +30,7 @@ namespace LogicalHacking.ScholarKpi.Persistence
                                          + DbDir 
                                          + @"/scholar-kpi-schema.sqlite"
                                          + @";Version=3"
-        let [<Literal>] ResolutionPath = __SOURCE_DIRECTORY__ + @"/../../../packages/System.Data.SQLite.Core/lib/net451/"
+        let [<Literal>] ResolutionPath = __SOURCE_DIRECTORY__ + @"/../../../lib/native/"
     // create a type alias with the connection string and database vendor settings
         type ExtensionDbProvider = SqlDataProvider< 
                                      SQLiteLibrary = Common.SQLiteLibrary.SystemDataSQLite,

@@ -1,7 +1,0 @@
-Fsharp.Data
-Fsharp.Configuration
-System.Data.Sqlite
-SQLProvider
-Expecto.BenchmarkDotNet
-Expecto.FsCheck
-Expecto.VisualStudio.TestAdapter

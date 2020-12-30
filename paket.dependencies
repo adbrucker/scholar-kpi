@@ -1,39 +1,47 @@
-framework: auto-detect
-
-source https://nuget.org/api/v2
-
-
-nuget Expecto.BenchmarkDotNet
-nuget Expecto.FsCheck
-nuget Expecto.VisualStudio.TestAdapter version_in_path: true
-
-clitool dotnet-fake
-
-group Formatting
-source https://nuget.org/api/v2
-source https://ci.appveyor.com/nuget/fsharp-formatting
-
-nuget FSharp.Formatting prerelease
-nuget FSharp.Formatting.CommandTool prerelease
-
-group FakeBuild
+version 5.241.2
 source https://api.nuget.org/v3/index.json
 
 storage: none
+framework: netcoreapp3.1, netstandard2.0, netstandard2.1
 
-nuget Fake.Core.Target
-nuget Fake.DotNet.Cli
-nuget Fake.Tools.Git
-nuget Fake.DotNet.MSBuild
-nuget Fake.Core.ReleaseNotes 
-nuget Fake.DotNet.AssemblyInfoFile
-nuget Fake.DotNet.Paket
-nuget Fake.DotNet.Testing.Expecto 
-nuget Fake.DotNet.FSFormatting 
-nuget Fake.Api.GitHub
+nuget FSharp.Core
+nuget Expecto
+nuget FsCheck 2.14.0
+nuget Expecto.FsCheck
+
+group Docs
+  source https://api.nuget.org/v3/index.json
+
+  framework: netstandard2.0
+  storage: symlink
+
+  nuget FSharp.Compiler.Service ~> 35.0
+  nuget FSharp.Formatting ~> 4.1
+  nuget Newtonsoft.Json
+
+// [ FAKE GROUP ]
+group Build
+  source https://api.nuget.org/v3/index.json
+
+  framework: netstandard2.0
+  storage: none
+
+  nuget Fake.Core.Target
+  nuget Fake.Core.Process
+  nuget Fake.DotNet.Cli
+  nuget Fake.Core.ReleaseNotes
+  nuget Fake.DotNet.AssemblyInfoFile
+  nuget Fake.DotNet.Paket
+  nuget Fake.Tools.Git
+  nuget Fake.Core.Environment
+  nuget Fake.Core.UserInput
+  nuget Fake.IO.FileSystem
+  nuget Fake.DotNet.MsBuild
+  nuget Fake.Api.GitHub
 
 group Main
-nuget System.Data.Sqlite
-nuget SQLProvider
-nuget Fsharp.Data
-nuget Fsharp.Configuration
+  nuget Argu
+  nuget System.Data.Sqlite.Core
+  nuget SQLProvider
+  nuget Fsharp.Data
+  nuget Fsharp.Configuration ~> 2.0.0-alpha3 

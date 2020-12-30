@@ -26,19 +26,18 @@ After cloning the repository, call
 
 After that, the project can be build using
 
-        ./build.sh
+        dotnet fake build
 
 ### Windows
 
 On Windows (untested), you need to set up the initial project manually:
 
         type src/resources/scholar-kpi-schema.sql | sqlite3 src/resources/scholar-kpi-schema.sqlite
-        .paket/paket.bootstrapper.exe
-        .paket/paket.exe install
+        dotnet tool restore
   
 After that, the project can be build using
 
-        build.cmd
+       .dotnet fake build
 
 ## Team
 

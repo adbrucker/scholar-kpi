@@ -1,0 +1,8 @@
+Fsharp.Data
+Fsharp.Configuration
+System.Data.Sqlite.Core
+SQLProvider
+FSharp.Core
+Expecto
+FsCheck
+Expecto.FsCheck
