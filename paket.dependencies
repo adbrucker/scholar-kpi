@@ -1,4 +1,4 @@
-version 5.251.0
+version 5.249.0
 source https://api.nuget.org/v3/index.json
 
 storage: none
@@ -6,7 +6,7 @@ framework: netcoreapp3.1, netstandard2.0, netstandard2.1
 
 nuget FSharp.Core
 nuget Expecto
-nuget FsCheck 2.14.0
+nuget FsCheck 
 nuget Expecto.FsCheck
 
 group Docs

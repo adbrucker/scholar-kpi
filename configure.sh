@@ -23,12 +23,11 @@ else
   echo "  Compiling libSQLite.Interop.dll.so"
   bash Setup/compile-interop-assembly-release.sh > /dev/null
   echo "  Installing libSQLite.Interop.so"
-  mkdir -p $CWD/lib/native/
-  cp bin/2013/Release/bin/libSQLite.Interop.so  $CWD/lib/native/libSQLite.Interop.dll.so
+  mkdir -p $CWD/src/LogicalHacking.ScholarKpi/runtimes/linux/native/
+  cp bin/2013/Release/bin/libSQLite.Interop.so  $CWD/src/LogicalHacking.ScholarKpi/runtimes/linux/native/libSQLite.Interop.dll.so
   cd $CWD
   rm -rf $BUILDIR
 fi
-
 
 echo "Creating empty database for type provider."
 rm -f src/resources/scholar-kpi-schema.sqlite
