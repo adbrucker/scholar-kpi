@@ -195,5 +195,5 @@ src/resources/scholar-kpi.sqlite
 # docs
 docs
 
-# lib
-lib
+# native libs/runtimes
+src/LogicalHacking.ScholarKpi/runtimes/
